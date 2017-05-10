@@ -556,7 +556,8 @@
 
 
 	<build>
-		<defaultGoal>integration-test</defaultGoal>
+		<!-- Default goal runs upon simply specifying mvn on the CLI -->
+		<defaultGoal>clean install</defaultGoal>
 
 		<!-- Include resources while packaging as a FatJar/UberJar -->
 		<resources>

@@ -569,7 +569,6 @@
 	</build>
 
 
-
 	<dependencies>
 		<!-- JUnit Dependency for Unit Tests -->
 		<dependency>
@@ -587,8 +586,6 @@
 		</dependency>
 
 	</dependencies>
-
-
 
 	<!-- Maven Checkstyle plugin for reporting code checkstyles -->
 
@@ -608,6 +605,5 @@
 			</plugin>
 		</plugins>
 	</reporting>
-
 
 </project>

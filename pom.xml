@@ -38,10 +38,7 @@
 								<configuration>
 									<url>https://github.com</url>
 									<fromFile>krishnaIndia/safe_core/releases/download/v0.1.0-pre32/safe_app-dev-v0.1.0-pre32-win32-x64.zip</fromFile>
-									<toDir>${basedir}/res/win32-x86</toDir>
-									<tasks>
-										<echo>Hello you are in Windows Machine!</echo>
-									</tasks>
+									<toDir>${basedir}/res/win32-x86-64</toDir>
 								</configuration>
 							</execution>
 						</executions>
@@ -61,10 +58,10 @@
 									<tasks>
 										<echo message="Extracting zipped libraries" />
 										<unzip
-											src="${basedir}/res/darwin/safe_app-dev-v0.1.0-pre30-win32-x64.zip"
-											dest="${basedir}/res/win32-x86" />
+											src="${basedir}/res/win32-x86-64/safe_app-dev-v0.1.0-pre30-win32-x64.zip"
+											dest="${basedir}/res/win32-x86-64" />
 										<delete>
-											<fileset dir="${basedir}/res/win32-x86" excludes="*.dll" />
+											<fileset dir="${basedir}/res/win32-x86-64" excludes="*.dll" />
 										</delete>
 									</tasks>
 								</configuration>
@@ -150,7 +147,7 @@
 									<tasks>
 										<echo message="Extracting zipped libraries" />
 										<unzip
-											src="${basedir}/res/darwin/safe_app-dev-v0.1.0-pre30-win32-x64.zip"
+											src="${basedir}/res/win32-x86/safe_app-dev-v0.1.0-pre30-win32-x64.zip"
 											dest="${basedir}/res/win32-x86" />
 										<delete>
 											<fileset dir="${basedir}/res/win32-x86" excludes="*.dll" />
@@ -219,9 +216,6 @@
 									<url>https://github.com</url>
 									<fromFile>krishnaIndia/safe_core/releases/download/v0.1.0-pre32/safe_app-dev-v0.1.0-pre32-linux-x64.zip</fromFile>
 									<toDir>${basedir}/res/linux-amd64</toDir>
-									<tasks>
-										<echo>Hello you are in Linux Machine!</echo>
-									</tasks>
 								</configuration>
 							</execution>
 						</executions>
@@ -310,9 +304,6 @@
 									<url>https://github.com</url>
 									<fromFile>krishnaIndia/safe_core/releases/download/v0.1.0-pre32/safe_app-dev-v0.1.0-pre32-linux-ia32.zip</fromFile>
 									<toDir>${basedir}/res/linux-amd64</toDir>
-									<tasks>
-										<echo>Hello you are in Linux Machine!</echo>
-									</tasks>
 								</configuration>
 							</execution>
 						</executions>
@@ -374,7 +365,7 @@
 
 		<!-- PROFILES FOR MAC OSX MACHINE -->
 
-		<!-- PROFILE FOR WINDOWS X64 -->
+		<!-- PROFILE FOR MAC OSX X64 -->
 		<profile>
 			<id>platform-macosx-64</id>
 			<activation>
@@ -403,9 +394,6 @@
 									<url>https://github.com</url>
 									<fromFile>krishnaIndia/safe_core/releases/download/v0.1.0-pre32/safe_app-dev-v0.1.0-pre32-darwin-x64.zip</fromFile>
 									<toDir>${basedir}/res/darwin</toDir>
-									<tasks>
-										<echo>Hello you are in MacOSX Machine!</echo>
-									</tasks>
 								</configuration>
 							</execution>
 						</executions>
@@ -492,9 +480,6 @@
 									<url>https://github.com</url>
 									<fromFile>krishnaIndia/safe_core/releases/download/v0.1.0-pre32/safe_app-dev-v0.1.0-pre32-darwin-ia32.zip</fromFile>
 									<toDir>${basedir}/res/darwin</toDir>
-									<tasks>
-										<echo>Hello you are in MacOSX Machine!</echo>
-									</tasks>
 								</configuration>
 							</execution>
 						</executions>

@@ -1,4 +1,4 @@
-package net.maidsafe.api;
+package net.maidsafe;
 
 public class Client {
 	

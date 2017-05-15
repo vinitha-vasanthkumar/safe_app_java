@@ -1,5 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.maidsafe.api</groupId>
 	<artifactId>safe_app</artifactId>
@@ -16,7 +16,7 @@
 			<activation>
 				<os>
 					<family>windows</family>
-					<arch>x86</arch>
+					<arch>x86_32</arch>
 				</os>
 			</activation>
 			<build>
@@ -36,18 +36,33 @@
 								</goals>
 								<configuration>
 									<url>https://github.com</url>
-									<fromFile>gnunicorn/safe_core/releases/download/v0.1.0-pre30/safe_app-dev-v0.1.0-pre30-win32-x64.zip</fromFile>
+									<fromFile>
+										gnunicorn/safe_core/releases/download/v0.1.0-pre30/safe_app-dev-v0.1.0-pre30-win32-x64.zip
+									</fromFile>
 									<toDir>${basedir}/res/win32-x86</toDir>
-									<tasks>
-										<echo>Hello you are in Windows Machine!</echo>
-									</tasks>
+								</configuration>
+							</execution>
+
+							<!-- Downloading the libwinpthread-1 library zip -->
+							<execution>
+								<id>download-libwinpthread-1</id>
+								<phase>pre-integration-test</phase>
+								<goals>
+									<goal>download-single</goal>
+								</goals>
+								<configuration>
+									<url>https://github.com</url>
+									<fromFile>
+										gnunicorn/safe_core/releases/download/v0.1.0-pre3/libwinpthread-1-v0.1.0-pre3-win32-ia32.zip
+									</fromFile>
+									<toDir>${basedir}/res/win32-x86</toDir>
 								</configuration>
 							</execution>
 						</executions>
 					</plugin>
 
-					<!-- Unzip contents of libs downloaded and delete all except the required 
-						lib file -->
+					<!-- Unzip contents of libs downloaded and delete all except the required
+                        lib files -->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-antrun-plugin</artifactId>
@@ -58,12 +73,29 @@
 								<phase>pre-integration-test</phase>
 								<configuration>
 									<tasks>
-										<echo message="Extracting zipped libraries" />
+										<echo message="Extracting zipped libraries"/>
 										<unzip
-											src="${basedir}/res/win32-x86/safe_app-dev-v0.1.0-pre30-win32-x64.zip"
-											dest="${basedir}/res/win32-x86" />
+												src="${basedir}/res/win32-x86/safe_app-dev-v0.1.0-pre30-win32-x64.zip"
+												dest="${basedir}/res/win32-x86"/>
+									</tasks>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+
+							<!-- Extracting the downloaded libwinpthread-1 library -->
+							<execution>
+								<id>prepare</id>
+								<phase>pre-integration-test</phase>
+								<configuration>
+									<tasks>
+										<echo message="Extracting libwinpthread-1 library"/>
+										<unzip
+												src="${basedir}/res/win32-x86/libwinpthread-1-v0.1.0-pre3-win32-ia32.zip"
+												dest="${basedir}/res/win32-x86"/>
 										<delete>
-											<fileset dir="${basedir}/res/win32-x86" excludes="*.dll" />
+											<fileset dir="${basedir}/res/win32-x86" excludes="*.dll"/>
 										</delete>
 									</tasks>
 								</configuration>
@@ -71,11 +103,13 @@
 									<goal>run</goal>
 								</goals>
 							</execution>
+
+
 						</executions>
 					</plugin>
 
-					<!-- Maven Shade Plugin for creating a FatJar/UberJar with all transitive 
-						dependencies included -->
+					<!-- Maven Shade Plugin for creating a FatJar/UberJar with all transitive
+                        dependencies included -->
 
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -83,7 +117,6 @@
 						<version>3.0.0</version>
 						<executions>
 							<execution>
-								<id></id>
 								<phase>package</phase>
 								<goals>
 									<goal>shade</goal>
@@ -97,7 +130,6 @@
 
 			</build>
 		</profile>
-
 
 		<!-- PROFILE FOR WINDOWS X64 -->
 		<profile>
@@ -105,6 +137,7 @@
 			<activation>
 				<os>
 					<family>windows</family>
+					<arch>x86_64</arch>
 				</os>
 			</activation>
 			<build>
@@ -124,130 +157,81 @@
 								</goals>
 								<configuration>
 									<url>https://github.com</url>
-									<fromFile>krishnaIndia/safe_core/releases/download/v0.1.0-pre32/safe_app-dev-v0.1.0-pre32-win32-x64.zip</fromFile>
+									<fromFile>
+										krishnaIndia/safe_core/releases/download/v0.1.0-pre32/safe_app-dev-v0.1.0-pre32-win32-x64.zip
+									</fromFile>
 									<toDir>${basedir}/res/win32-x86-64</toDir>
 								</configuration>
 							</execution>
-						</executions>
-					</plugin>
-
-					<!-- Unzip contents of libs downloaded and delete all except the required 
-						lib file -->
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.6</version>
-						<executions>
+							<!-- Downloading the libwinpthread-1 library zip -->
 							<execution>
-								<id>prepare</id>
-								<phase>pre-integration-test</phase>
-								<configuration>
-									<tasks>
-										<echo message="Extracting zipped libraries" />
-										<unzip
-											src="${basedir}/res/win32-x86-64/safe_app-dev-v0.1.0-pre32-win32-x64.zip"
-											dest="${basedir}/res/win32-x86-64" />
-										<delete>
-											<fileset dir="${basedir}/res/win32-x86-64" excludes="*.dll" />
-										</delete>
-									</tasks>
-								</configuration>
-								<goals>
-									<goal>run</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-
-					<!-- Maven Shade Plugin for creating a FatJar/UberJar with all transitive 
-						dependencies included -->
-
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-shade-plugin</artifactId>
-						<version>3.0.0</version>
-						<executions>
-							<execution>
-								<id></id>
-								<phase>package</phase>
-								<goals>
-									<goal>shade</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-
-				<!-- END OF PLUGINS -->
-
-			</build>
-		</profile>
-		<!-- PROFILES FOR LINUX MACHINE -->
-
-		<!-- PROFILE FOR LINUX X64 -->
-		<profile>
-			<id>platform-linux-64</id>
-			<activation>
-				<os>
-					<family>unix</family>
-				</os>
-			</activation>
-			<build>
-				<!-- START OF PLUGINS -->
-				<plugins>
-					<!-- Maven Downloader Plugin for downloading the lib files -->
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>wagon-maven-plugin</artifactId>
-						<version>1.0</version>
-						<executions>
-							<execution>
-								<id>download-libs</id>
+								<id>download-libwinpthread-1</id>
 								<phase>pre-integration-test</phase>
 								<goals>
 									<goal>download-single</goal>
 								</goals>
 								<configuration>
 									<url>https://github.com</url>
-									<fromFile>krishnaIndia/safe_core/releases/download/v0.1.0-pre32/safe_app-dev-v0.1.0-pre32-linux-x64.zip</fromFile>
-									<toDir>${basedir}/res/linux-amd64</toDir>
+									<fromFile>
+										gnunicorn/safe_core/releases/download/v0.1.0-pre3/libwinpthread-1-v0.1.0-pre3-win32-x64.zip
+									</fromFile>
+									<toDir>${basedir}/res/win32-x86-64</toDir>
 								</configuration>
 							</execution>
+
 						</executions>
 					</plugin>
 
-					<!-- Unzip contents of libs downloaded and delete all except the required 
-						lib file -->
+					<!-- Unzip contents of libs downloaded and delete all except the required
+                        lib file -->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-antrun-plugin</artifactId>
 						<version>1.6</version>
 						<executions>
 							<execution>
-								<id>prepare</id>
+								<id>downloadlibs</id>
 								<phase>pre-integration-test</phase>
 								<configuration>
 									<tasks>
-										<echo message="Extracting zipped libraries" />
+										<echo message="Extracting zipped libraries"/>
 										<unzip
-											src="${basedir}/res/linux-amd64/safe_app-dev-v0.1.0-pre32-linux-x64.zip"
-											dest="${basedir}/res/linux-amd64" />
-										<delete>
-											<fileset dir="${basedir}/res/linux-amd64" excludes="*.so" />
-										</delete>
+												src="${basedir}/res/win32-x86-64/safe_app-dev-v0.1.0-pre32-win32-x64.zip"
+												dest="${basedir}/res/win32-x86-64"/>
 									</tasks>
+
 								</configuration>
 								<goals>
 									<goal>run</goal>
 								</goals>
 							</execution>
+
+							<!-- Extracting the downloaded libwinpthread-1 library -->
+							<execution>
+								<id>downloadwinpthread</id>
+								<phase>pre-integration-test</phase>
+								<configuration>
+									<tasks>
+										<echo message="Extracting winpthread-1 library"/>
+										<unzip
+												src="${basedir}/res/win32-x86-64/libwinpthread-1-v0.1.0-pre3-win32-x64.zip"
+												dest="${basedir}/res/win32-x86-64"/>
+										<delete>
+											<fileset dir="${basedir}/res/win32-x86-64" excludes="*.dll"/>
+										</delete>
+									</tasks>
+
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+
 						</executions>
 					</plugin>
 
-
-
-					<!-- Maven Shade Plugin for creating a FatJar/UberJar with all transitive 
-						dependencies included -->
+					<!-- Maven Shade Plugin for creating a FatJar/UberJar with all transitive
+                        dependencies included -->
 
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -255,7 +239,6 @@
 						<version>3.0.0</version>
 						<executions>
 							<execution>
-								<id></id>
 								<phase>package</phase>
 								<goals>
 									<goal>shade</goal>
@@ -269,6 +252,9 @@
 
 			</build>
 		</profile>
+
+
+		<!-- PROFILES FOR LINUX MACHINE -->
 
 		<!-- PROFILE FOR LINUX X86 -->
 		<profile>
@@ -277,7 +263,7 @@
 				<os>
 					<family>unix</family>
 					<name>Linux</name>
-					<arch>x86</arch>
+					<arch>x86_32</arch>
 				</os>
 			</activation>
 			<build>
@@ -297,7 +283,9 @@
 								</goals>
 								<configuration>
 									<url>https://github.com</url>
-									<fromFile>krishnaIndia/safe_core/releases/download/v0.1.0-pre32/safe_app-dev-v0.1.0-pre32-linux-ia32.zip</fromFile>
+									<fromFile>
+										krishnaIndia/safe_core/releases/download/v0.1.0-pre32/safe_app-dev-v0.1.0-pre32-linux-ia32.zip
+									</fromFile>
 									<toDir>${basedir}/res/linux-amd64</toDir>
 								</configuration>
 							</execution>
@@ -315,12 +303,12 @@
 								<phase>pre-integration-test</phase>
 								<configuration>
 									<tasks>
-										<echo message="Extracting zipped libraries" />
+										<echo message="Extracting zipped libraries"/>
 										<unzip
-											src="${basedir}/res/linux-amd64/safe_app-dev-v0.1.0-pre32-linux-ia32.zip"
-											dest="${basedir}/res/linux-amd64" />
+												src="${basedir}/res/linux-amd64/safe_app-dev-v0.1.0-pre32-linux-ia32.zip"
+												dest="${basedir}/res/linux-amd64"/>
 										<delete>
-											<fileset dir="${basedir}/res/linux-amd64" excludes="*.so" />
+											<fileset dir="${basedir}/res/linux-amd64" excludes="*.so"/>
 										</delete>
 									</tasks>
 								</configuration>
@@ -332,9 +320,8 @@
 					</plugin>
 
 
-
-					<!-- Maven Shade Plugin for creating a FatJar/UberJar with all transitive 
-						dependencies included -->
+					<!-- Maven Shade Plugin for creating a FatJar/UberJar with all transitive
+                        dependencies included -->
 
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -342,7 +329,94 @@
 						<version>3.0.0</version>
 						<executions>
 							<execution>
-								<id></id>
+								<phase>package</phase>
+								<goals>
+									<goal>shade</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+
+				<!-- END OF PLUGINS -->
+
+			</build>
+		</profile>
+
+		<!-- PROFILE FOR LINUX X64 -->
+		<profile>
+			<id>platform-linux-64</id>
+			<activation>
+				<os>
+					<family>unix</family>
+					<name>Linux</name>
+					<arch>x86_64</arch>
+				</os>
+			</activation>
+			<build>
+				<!-- START OF PLUGINS -->
+				<plugins>
+					<!-- Maven Downloader Plugin for downloading the lib files -->
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>wagon-maven-plugin</artifactId>
+						<version>1.0</version>
+						<executions>
+							<execution>
+								<id>download-libs</id>
+								<phase>pre-integration-test</phase>
+								<goals>
+									<goal>download-single</goal>
+								</goals>
+								<configuration>
+									<url>https://github.com</url>
+									<fromFile>
+										krishnaIndia/safe_core/releases/download/v0.1.0-pre32/safe_app-dev-v0.1.0-pre32-linux-x64.zip
+									</fromFile>
+									<toDir>${basedir}/res/linux-amd64</toDir>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+					<!-- Unzip contents of libs downloaded and delete all except the required
+                        lib file -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.6</version>
+						<executions>
+							<execution>
+								<id>prepare</id>
+								<phase>pre-integration-test</phase>
+								<configuration>
+									<tasks>
+										<echo message="Extracting zipped libraries"/>
+										<unzip
+												src="${basedir}/res/linux-amd64/safe_app-dev-v0.1.0-pre32-linux-x64.zip"
+												dest="${basedir}/res/linux-amd64"/>
+										<delete>
+											<fileset dir="${basedir}/res/linux-amd64" excludes="*.so"/>
+										</delete>
+									</tasks>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+
+					<!-- Maven Shade Plugin for creating a FatJar/UberJar with all transitive
+                        dependencies included -->
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-shade-plugin</artifactId>
+						<version>3.0.0</version>
+						<executions>
+							<execution>
 								<phase>package</phase>
 								<goals>
 									<goal>shade</goal>
@@ -360,92 +434,6 @@
 
 		<!-- PROFILES FOR MAC OSX MACHINE -->
 
-		<!-- PROFILE FOR MAC OSX X64 -->
-		<profile>
-			<id>platform-macosx-64</id>
-			<activation>
-				<os>
-					<family>mac</family>
-					<name>Mac OS X</name>
-					<!-- <arch>x64</arch> -->
-				</os>
-			</activation>
-			<build>
-				<!-- START OF PLUGINS -->
-				<plugins>
-					<!-- Maven Downloader Plugin for downloading the lib files -->
-					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>wagon-maven-plugin</artifactId>
-						<version>1.0</version>
-						<executions>
-							<execution>
-								<id>download-libraries</id>
-								<phase>pre-integration-test</phase>
-								<goals>
-									<goal>download-single</goal>
-								</goals>
-								<configuration>
-									<url>https://github.com</url>
-									<fromFile>krishnaIndia/safe_core/releases/download/v0.1.0-pre32/safe_app-dev-v0.1.0-pre32-darwin-x64.zip</fromFile>
-									<toDir>${basedir}/res/darwin</toDir>
-								</configuration>
-							</execution>
-						</executions>
-					</plugin>
-
-					<!-- Unzip contents of libs downloaded -->
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.6</version>
-						<executions>
-							<execution>
-								<id>prepare</id>
-								<phase>pre-integration-test</phase>
-								<configuration>
-									<tasks>
-										<echo message="Extracting zipped libraries" />
-										<unzip
-											src="${basedir}/res/darwin/safe_app-dev-v0.1.0-pre32-darwin-x64.zip"
-											dest="${basedir}/res/darwin" />
-										<delete>
-											<fileset dir="${basedir}/res/darwin" excludes="*.dylib" />
-										</delete>
-									</tasks>
-								</configuration>
-								<goals>
-									<goal>run</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-
-
-					<!-- Maven Shade Plugin for creating a FatJar/UberJar with all transitive 
-						dependencies included -->
-
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-shade-plugin</artifactId>
-						<version>3.0.0</version>
-						<executions>
-							<execution>
-								<id></id>
-								<phase>package</phase>
-								<goals>
-									<goal>shade</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-
-				<!-- END OF PLUGINS -->
-
-			</build>
-		</profile>
-
 		<!-- PROFILE FOR MAC OSX X86 -->
 		<profile>
 			<id>platform-macosx-32</id>
@@ -453,7 +441,7 @@
 				<os>
 					<family>mac</family>
 					<name>Mac OS X</name>
-					<arch>x86</arch>
+					<arch>x86_32</arch>
 				</os>
 			</activation>
 			<build>
@@ -473,7 +461,9 @@
 								</goals>
 								<configuration>
 									<url>https://github.com</url>
-									<fromFile>krishnaIndia/safe_core/releases/download/v0.1.0-pre32/safe_app-dev-v0.1.0-pre32-darwin-ia32.zip</fromFile>
+									<fromFile>
+										krishnaIndia/safe_core/releases/download/v0.1.0-pre32/safe_app-dev-v0.1.0-pre32-darwin-ia32.zip
+									</fromFile>
 									<toDir>${basedir}/res/darwin</toDir>
 								</configuration>
 							</execution>
@@ -491,12 +481,12 @@
 								<phase>pre-integration-test</phase>
 								<configuration>
 									<tasks>
-										<echo message="Extracting zipped libraries" />
+										<echo message="Extracting zipped libraries"/>
 										<unzip
-											src="${basedir}/res/darwin/safe_app-dev-v0.1.0-pre32-darwin-ia32.zip"
-											dest="${basedir}/res/darwin" />
+												src="${basedir}/res/darwin/safe_app-dev-v0.1.0-pre32-darwin-ia32.zip"
+												dest="${basedir}/res/darwin"/>
 										<delete>
-											<fileset dir="${basedir}/res/darwin" excludes="*.dylib" />
+											<fileset dir="${basedir}/res/darwin" excludes="*.dylib"/>
 										</delete>
 									</tasks>
 								</configuration>
@@ -508,8 +498,8 @@
 					</plugin>
 
 
-					<!-- Maven Shade Plugin for creating a FatJar/UberJar with all transitive 
-						dependencies included -->
+					<!-- Maven Shade Plugin for creating a FatJar/UberJar with all transitive
+                        dependencies included -->
 
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -517,7 +507,6 @@
 						<version>3.0.0</version>
 						<executions>
 							<execution>
-								<id></id>
 								<phase>package</phase>
 								<goals>
 									<goal>shade</goal>
@@ -531,6 +520,94 @@
 
 			</build>
 		</profile>
+
+		<!-- PROFILE FOR MAC OSX X64 -->
+		<profile>
+			<id>platform-macosx-64</id>
+			<activation>
+				<os>
+					<family>mac</family>
+					<name>Mac OS X</name>
+					<arch>x86_64</arch>
+				</os>
+			</activation>
+			<build>
+				<!-- START OF PLUGINS -->
+				<plugins>
+					<!-- Maven Downloader Plugin for downloading the lib files -->
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>wagon-maven-plugin</artifactId>
+						<version>1.0</version>
+						<executions>
+							<execution>
+								<id>download-libraries</id>
+								<phase>pre-integration-test</phase>
+								<goals>
+									<goal>download-single</goal>
+								</goals>
+								<configuration>
+									<url>https://github.com</url>
+									<fromFile>
+										krishnaIndia/safe_core/releases/download/v0.1.0-pre32/safe_app-dev-v0.1.0-pre32-darwin-x64.zip
+									</fromFile>
+									<toDir>${basedir}/res/darwin</toDir>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+					<!-- Unzip contents of libs downloaded -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<version>1.6</version>
+						<executions>
+							<execution>
+								<id>prepare</id>
+								<phase>pre-integration-test</phase>
+								<configuration>
+									<tasks>
+										<echo message="Extracting zipped libraries"/>
+										<unzip
+												src="${basedir}/res/darwin/safe_app-dev-v0.1.0-pre32-darwin-x64.zip"
+												dest="${basedir}/res/darwin"/>
+										<delete>
+											<fileset dir="${basedir}/res/darwin" excludes="*.dylib"/>
+										</delete>
+									</tasks>
+								</configuration>
+								<goals>
+									<goal>run</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
+
+					<!-- Maven Shade Plugin for creating a FatJar/UberJar with all transitive
+                        dependencies included -->
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-shade-plugin</artifactId>
+						<version>3.0.0</version>
+						<executions>
+							<execution>
+								<phase>package</phase>
+								<goals>
+									<goal>shade</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+
+				<!-- END OF PLUGINS -->
+
+			</build>
+		</profile>
+
 
 	</profiles>
 
@@ -545,6 +622,16 @@
 				<directory>${basedir}/res</directory>
 			</resource>
 		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+		</plugins>
 
 	</build>
 
@@ -564,6 +651,14 @@
 			<artifactId>jna</artifactId>
 			<version>4.4.0</version>
 		</dependency>
+
+		<!-- JNA Native Access Platform dependency-->
+		<dependency>
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna-platform</artifactId>
+			<version>4.4.0</version>
+		</dependency>
+
 
 	</dependencies>
 

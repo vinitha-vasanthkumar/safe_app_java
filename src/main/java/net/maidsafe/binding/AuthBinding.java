@@ -24,9 +24,10 @@ public interface AuthBinding extends Library {
 	void app_registered(String appId, AuthGrantedResponse authGranted,
 			Pointer userPointer, FfiCallback.NetworkObserverCallback obsCb,
 			PointerByReference appPointerRef);
-	// void app_unregistered();
-	// void app_registered();
-	// void app_free();
+
+	void app_unregistered(Pointer userPointer,
+			FfiCallback.NetworkObserverCallback obsCb,
+			PointerByReference appPointerRef);
 	// //Test utils
 	// void test_create_app();
 	// void test_create_app_with_access();

@@ -10,12 +10,17 @@ import net.maidsafe.binding.model.FfiCallback;
 
 public abstract class NetworkObserver {
 
+	public enum Status {
+		CONNECTED,
+		CONNECTING,
+		TERMINATED
+	}
 	private NetworkObserver instance;
 	private final PointerByReference appPointerRef = new PointerByReference();
 	private final CompletableFuture<SafeClient> future = new CompletableFuture<SafeClient>();
 	private App app;
 	
-	final FfiCallback.NetworkObserverCallback observer = new FfiCallback.NetworkObserverCallback() {
+	private final FfiCallback.NetworkObserverCallback observer = new FfiCallback.NetworkObserverCallback() {
 		
 		@Override
 		public void onResponse(Pointer userData, int errorCod, int event) {			
@@ -23,7 +28,7 @@ public abstract class NetworkObserver {
 				app.setAppHandle(appPointerRef.getValue());
 				future.complete(new SafeClient(app));
 			}
-			instance.onStateChange(event);
+			instance.onStateChange(Status.values()[event]);
 		}
 	};
 	
@@ -48,7 +53,7 @@ public abstract class NetworkObserver {
 		return future;
 	}
 	
-	public abstract void onStateChange(int event);
+	public abstract void onStateChange(Status event);
 	
 	public abstract void onError(int errorCode);
 	

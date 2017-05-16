@@ -15,6 +15,7 @@ import net.maidsafe.binding.model.ContainerPermissions;
 import net.maidsafe.binding.model.ContainerRequest;
 import net.maidsafe.binding.model.FfiCallback;
 import net.maidsafe.binding.model.FfiResult;
+import net.maidsafe.utils.Helper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +38,10 @@ public class Auth {
 
 		future = new CompletableFuture<String>();
 		callback = new FfiCallback.Auth() {
-			
+
 			@Override
-			public void onResponse(Pointer userData, FfiResult result, int reqId,
-					String uri) {
+			public void onResponse(Pointer userData, FfiResult result,
+					int reqId, String uri) {
 				if (result.isError()) {
 					future.completeExceptionally(new Exception(result
 							.toString()));
@@ -114,8 +115,20 @@ public class Auth {
 		return future;
 	}
 
-	public SafeClient connectAsAnnonymous() {
-		return null;
+	public CompletableFuture<SafeClient> connectAsAnnonymous(
+			final NetworkObserver observer) {
+		final CompletableFuture<SafeClient> future;
+		future = observer.getFuture();
+		observer.setApp(new App(null, null, null));
+		BindingFactory
+				.getInstance()
+				.getAuth()
+				.app_unregistered(null, observer.getObserver(),
+						observer.getAppRef());		
+		if (Helper.isMockEnvironment()) {			
+			observer.getObserver().onResponse(null, 0, 0);
+		}
+		return future;
 	}
 
 	public CompletableFuture<SafeClient> connectWithURI(final AppInfo appInfo,
@@ -123,20 +136,25 @@ public class Auth {
 		final CompletableFuture<SafeClient> future;
 		future = observer.getFuture();
 
-		
 		FfiCallback.AuthGranted authCb = new FfiCallback.AuthGranted() {
 
 			@Override
 			public void onResponse(Pointer userData, int reqId,
-					AuthGrantedResponse authGranted) {							
-				observer.setApp(new App(appInfo, new Keys(authGranted.app_keys), new AccessContainerMeta(authGranted.access_container)));
-				try {					
+					AuthGrantedResponse authGranted) {
+				observer.setApp(new App(appInfo,
+						new Keys(authGranted.app_keys),
+						new AccessContainerMeta(authGranted.access_container)));
+				try {
 					BindingFactory
-					.getInstance()
-					.getAuth()
-					.app_registered(appInfo.getId(), authGranted, null,
-							observer.getObserver(), observer.getAppRef());
-				} catch(Exception e) {
+							.getInstance()
+							.getAuth()
+							.app_registered(appInfo.getId(), authGranted, null,
+									observer.getObserver(),
+									observer.getAppRef());
+					if (Helper.isMockEnvironment()) {			
+						observer.getObserver().onResponse(null, 0, 0);
+					}
+				} catch (Exception e) {
 					future.completeExceptionally(e);
 				}
 			}

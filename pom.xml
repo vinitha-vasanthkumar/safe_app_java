@@ -628,6 +628,15 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
+			<plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-surefire-plugin</artifactId>      
+		        <configuration>
+		            <environmentVariables>
+		                <MOCK_ENV>true</MOCK_ENV>
+		            </environmentVariables>
+		        </configuration>
+		    </plugin>
 		</plugins>
 
 	</build>

@@ -6,6 +6,7 @@ import com.sun.jna.ptr.PointerByReference;
 
 import net.maidsafe.binding.model.AuthGrantedResponse;
 import net.maidsafe.binding.model.AuthReq;
+import net.maidsafe.binding.model.ContainerPermissions;
 import net.maidsafe.binding.model.ContainerRequest;
 import net.maidsafe.binding.model.FfiCallback;
 
@@ -28,7 +29,10 @@ public interface AuthBinding extends Library {
 	void app_unregistered(Pointer userPointer,
 			FfiCallback.NetworkObserverCallback obsCb,
 			PointerByReference appPointerRef);
+
 	// //Test utils
-	// void test_create_app();
-	// void test_create_app_with_access();
+	int test_create_app(PointerByReference appPointerRef);
+
+	int test_create_app_with_access(ContainerPermissions[] permissions,
+			long permissionsLength, PointerByReference appPointerRef);
 }

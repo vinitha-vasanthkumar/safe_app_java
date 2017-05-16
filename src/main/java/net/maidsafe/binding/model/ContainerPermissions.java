@@ -1,6 +1,7 @@
 package net.maidsafe.binding.model;
 
 import com.sun.jna.Structure;
+
 import net.maidsafe.api.model.ContainerPermission;
 
 import java.util.Arrays;
@@ -24,7 +25,7 @@ public class ContainerPermissions extends Structure {
 
 		for (int i = 0; i < access_len; i++) {
 			access[i] = permission.getPermissions().get(i).ordinal();
-		}		
+		}
 		allocateMemory();
 	}
 

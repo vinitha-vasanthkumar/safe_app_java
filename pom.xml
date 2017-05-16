@@ -29,8 +29,8 @@
 						<version>1.0</version>
 						<executions>
 							<execution>
-								<id>download-libs</id>
-								<phase>pre-integration-test</phase>
+								<id>download-libs-32</id>
+								<phase>validate</phase>
 								<goals>
 									<goal>download-single</goal>
 								</goals>
@@ -46,7 +46,7 @@
 							<!-- Downloading the libwinpthread-1 library zip -->
 							<execution>
 								<id>download-libwinpthread-1</id>
-								<phase>pre-integration-test</phase>
+								<phase>validate</phase>
 								<goals>
 									<goal>download-single</goal>
 								</goals>
@@ -66,18 +66,18 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.6</version>
+						<version>1.8</version>
 						<executions>
 							<execution>
 								<id>prepare</id>
-								<phase>pre-integration-test</phase>
+								<phase>validate</phase>
 								<configuration>
-									<tasks>
+									<target unless="${wagon.skip}">
 										<echo message="Extracting zipped libraries"/>
 										<unzip
 												src="${basedir}/res/win32-x86/safe_app-dev-v0.1.0-pre30-win32-x64.zip"
 												dest="${basedir}/res/win32-x86"/>
-									</tasks>
+									</target>
 								</configuration>
 								<goals>
 									<goal>run</goal>
@@ -86,10 +86,10 @@
 
 							<!-- Extracting the downloaded libwinpthread-1 library -->
 							<execution>
-								<id>prepare</id>
-								<phase>pre-integration-test</phase>
+								<id>downloadwinpthread-32</id>
+								<phase>validate</phase>
 								<configuration>
-									<tasks>
+									<target unless="${wagon.skip}">
 										<echo message="Extracting libwinpthread-1 library"/>
 										<unzip
 												src="${basedir}/res/win32-x86/libwinpthread-1-v0.1.0-pre3-win32-ia32.zip"
@@ -97,7 +97,7 @@
 										<delete>
 											<fileset dir="${basedir}/res/win32-x86" excludes="*.dll"/>
 										</delete>
-									</tasks>
+									</target>
 								</configuration>
 								<goals>
 									<goal>run</goal>
@@ -136,8 +136,7 @@
 			<id>platform-windows-64</id>
 			<activation>
 				<os>
-					<family>windows</family>
-					<arch>x86_64</arch>
+					<family>windows</family>					
 				</os>
 			</activation>
 			<build>
@@ -151,7 +150,7 @@
 						<executions>
 							<execution>
 								<id>download-libs</id>
-								<phase>pre-integration-test</phase>
+								<phase>validate</phase>
 								<goals>
 									<goal>download-single</goal>
 								</goals>
@@ -160,13 +159,13 @@
 									<fromFile>
 										krishnaIndia/safe_core/releases/download/v0.1.0-pre32/safe_app-dev-v0.1.0-pre32-win32-x64.zip
 									</fromFile>
-									<toDir>${basedir}/res/win32-x86-64</toDir>
+									<toDir>${basedir}/res/win32-x86-64</toDir>									
 								</configuration>
 							</execution>
 							<!-- Downloading the libwinpthread-1 library zip -->
 							<execution>
 								<id>download-libwinpthread-1</id>
-								<phase>pre-integration-test</phase>
+								<phase>validate</phase>
 								<goals>
 									<goal>download-single</goal>
 								</goals>
@@ -175,7 +174,7 @@
 									<fromFile>
 										gnunicorn/safe_core/releases/download/v0.1.0-pre3/libwinpthread-1-v0.1.0-pre3-win32-x64.zip
 									</fromFile>
-									<toDir>${basedir}/res/win32-x86-64</toDir>
+									<toDir>${basedir}/res/win32-x86-64</toDir>									
 								</configuration>
 							</execution>
 
@@ -187,19 +186,18 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.6</version>
+						<version>1.8</version>
 						<executions>
 							<execution>
-								<id>downloadlibs</id>
-								<phase>pre-integration-test</phase>
-								<configuration>
-									<tasks>
-										<echo message="Extracting zipped libraries"/>
+								<id>downloadlibs-64</id>
+								<phase>validate</phase>
+								<configuration>									
+									<target unless="${wagon.skip}">
+										<echo message="Extracting zipped libraries"/>										
 										<unzip
-												src="${basedir}/res/win32-x86-64/safe_app-dev-v0.1.0-pre32-win32-x64.zip"
-												dest="${basedir}/res/win32-x86-64"/>
-									</tasks>
-
+											src="${basedir}/res/win32-x86-64/safe_app-dev-v0.1.0-pre32-win32-x64.zip"
+											dest="${basedir}/res/win32-x86-64"/>																														
+									</target>									
 								</configuration>
 								<goals>
 									<goal>run</goal>
@@ -208,19 +206,18 @@
 
 							<!-- Extracting the downloaded libwinpthread-1 library -->
 							<execution>
-								<id>downloadwinpthread</id>
-								<phase>pre-integration-test</phase>
-								<configuration>
-									<tasks>
+								<id>downloadwinpthread-64</id>
+								<phase>validate</phase>
+								<configuration>							
+									<target unless="${wagon.skip}">							
 										<echo message="Extracting winpthread-1 library"/>
 										<unzip
 												src="${basedir}/res/win32-x86-64/libwinpthread-1-v0.1.0-pre3-win32-x64.zip"
 												dest="${basedir}/res/win32-x86-64"/>
 										<delete>
 											<fileset dir="${basedir}/res/win32-x86-64" excludes="*.dll"/>
-										</delete>
-									</tasks>
-
+										</delete>																			
+									</target>
 								</configuration>
 								<goals>
 									<goal>run</goal>
@@ -277,7 +274,7 @@
 						<executions>
 							<execution>
 								<id>download-libs</id>
-								<phase>pre-integration-test</phase>
+								<phase>validate</phase>
 								<goals>
 									<goal>download-single</goal>
 								</goals>
@@ -296,13 +293,13 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.6</version>
+						<version>1.8</version>
 						<executions>
 							<execution>
 								<id>prepare</id>
-								<phase>pre-integration-test</phase>
+								<phase>validate</phase>
 								<configuration>
-									<tasks>
+									<target unless="${wagon.skip}">
 										<echo message="Extracting zipped libraries"/>
 										<unzip
 												src="${basedir}/res/linux-amd64/safe_app-dev-v0.1.0-pre32-linux-ia32.zip"
@@ -310,7 +307,7 @@
 										<delete>
 											<fileset dir="${basedir}/res/linux-amd64" excludes="*.so"/>
 										</delete>
-									</tasks>
+									</target>
 								</configuration>
 								<goals>
 									<goal>run</goal>
@@ -364,7 +361,7 @@
 						<executions>
 							<execution>
 								<id>download-libs</id>
-								<phase>pre-integration-test</phase>
+								<phase>validate</phase>
 								<goals>
 									<goal>download-single</goal>
 								</goals>
@@ -384,13 +381,13 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.6</version>
+						<version>1.8</version>
 						<executions>
 							<execution>
 								<id>prepare</id>
-								<phase>pre-integration-test</phase>
+								<phase>validate</phase>
 								<configuration>
-									<tasks>
+									<target unless="${wagon.skip}">
 										<echo message="Extracting zipped libraries"/>
 										<unzip
 												src="${basedir}/res/linux-amd64/safe_app-dev-v0.1.0-pre32-linux-x64.zip"
@@ -398,7 +395,7 @@
 										<delete>
 											<fileset dir="${basedir}/res/linux-amd64" excludes="*.so"/>
 										</delete>
-									</tasks>
+									</target>
 								</configuration>
 								<goals>
 									<goal>run</goal>
@@ -455,7 +452,7 @@
 						<executions>
 							<execution>
 								<id>download-libraries</id>
-								<phase>pre-integration-test</phase>
+								<phase>validate</phase>
 								<goals>
 									<goal>download-single</goal>
 								</goals>
@@ -474,13 +471,13 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.6</version>
+						<version>1.8</version>
 						<executions>
 							<execution>
 								<id>prepare</id>
-								<phase>pre-integration-test</phase>
+								<phase>validate</phase>
 								<configuration>
-									<tasks>
+									<target unless="${wagon.skip}">
 										<echo message="Extracting zipped libraries"/>
 										<unzip
 												src="${basedir}/res/darwin/safe_app-dev-v0.1.0-pre32-darwin-ia32.zip"
@@ -488,7 +485,7 @@
 										<delete>
 											<fileset dir="${basedir}/res/darwin" excludes="*.dylib"/>
 										</delete>
-									</tasks>
+									</target>
 								</configuration>
 								<goals>
 									<goal>run</goal>
@@ -542,7 +539,7 @@
 						<executions>
 							<execution>
 								<id>download-libraries</id>
-								<phase>pre-integration-test</phase>
+								<phase>validate</phase>
 								<goals>
 									<goal>download-single</goal>
 								</goals>
@@ -551,7 +548,7 @@
 									<fromFile>
 										krishnaIndia/safe_core/releases/download/v0.1.0-pre32/safe_app-dev-v0.1.0-pre32-darwin-x64.zip
 									</fromFile>
-									<toDir>${basedir}/res/darwin</toDir>
+									<toDir>${basedir}/res/darwin</toDir>									
 								</configuration>
 							</execution>
 						</executions>
@@ -561,13 +558,13 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.6</version>
+						<version>1.8</version>
 						<executions>
 							<execution>
 								<id>prepare</id>
-								<phase>pre-integration-test</phase>
+								<phase>validate</phase>
 								<configuration>
-									<tasks>
+									<target unless="${wagon.skip}">
 										<echo message="Extracting zipped libraries"/>
 										<unzip
 												src="${basedir}/res/darwin/safe_app-dev-v0.1.0-pre32-darwin-x64.zip"
@@ -575,7 +572,7 @@
 										<delete>
 											<fileset dir="${basedir}/res/darwin" excludes="*.dylib"/>
 										</delete>
-									</tasks>
+									</target>
 								</configuration>
 								<goals>
 									<goal>run</goal>
@@ -650,15 +647,7 @@
 			<groupId>net.java.dev.jna</groupId>
 			<artifactId>jna</artifactId>
 			<version>4.4.0</version>
-		</dependency>
-
-		<!-- JNA Native Access Platform dependency-->
-		<dependency>
-			<groupId>net.java.dev.jna</groupId>
-			<artifactId>jna-platform</artifactId>
-			<version>4.4.0</version>
-		</dependency>
-
+		</dependency>	
 
 	</dependencies>
 

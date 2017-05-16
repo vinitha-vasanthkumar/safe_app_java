@@ -17,9 +17,8 @@ public class FfiResult extends Structure {
 	public boolean isError() {
 		return this.error_code != 0;
 	}
-	
-	@Override
-	public String toString() {	
+		
+	public String errorMessage() {	
 		return String.format("Err: %d - %s", this.error_code, this.description);
 	}
 }

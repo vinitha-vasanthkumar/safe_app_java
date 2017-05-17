@@ -6,7 +6,7 @@ import net.maidsafe.api.SafeClient;
 import net.maidsafe.api.model.App;
 import net.maidsafe.api.model.ContainerPermission;
 import net.maidsafe.binding.BindingFactory;
-import net.maidsafe.binding.model.ContainerPermissions;
+import net.maidsafe.binding.model.FfiContainerPermission;
 
 import com.sun.jna.ptr.PointerByReference;
 
@@ -27,7 +27,7 @@ public class Utils {
 		BindingFactory
 				.getInstance()
 				.getAuth()
-				.test_create_app_with_access(new ContainerPermissions[1], 0,
+				.test_create_app_with_access(new FfiContainerPermission[1], 0,
 						appPointerRef);
 		app.setAppHandle(appPointerRef.getValue());
 		return new SafeClient(app);
@@ -36,11 +36,11 @@ public class Utils {
 	public SafeClient getTestAppWithAccess(List<ContainerPermission> access) {
 		App app = new App(null, null, null);
 		PointerByReference appPointerRef = new PointerByReference();
-		final ContainerPermissions[] accessPermissions = new ContainerPermissions[access
+		final FfiContainerPermission[] accessPermissions = new FfiContainerPermission[access
 				.size()];
 		int i = 0;
 		for (ContainerPermission container : access) {
-			accessPermissions[i] = new ContainerPermissions(container);
+			accessPermissions[i] = new FfiContainerPermission(container);
 			i++;
 		}
 		

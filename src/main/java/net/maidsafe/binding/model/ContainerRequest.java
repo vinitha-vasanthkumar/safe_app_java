@@ -8,16 +8,16 @@ import java.util.List;
 public class ContainerRequest extends Structure {
 	
 	public AppExchangeInfo app_exchange_info;
-	public ContainerPermissions.ByReference container_permissions;
+	public FfiContainerPermission.ByReference container_permissions;
 	public long containers_len;
 	public long containers_cap;
 	
-	public ContainerRequest(AppExchangeInfo appInfo, List<ContainerPermissions> permissions) {
+	public ContainerRequest(AppExchangeInfo appInfo, List<FfiContainerPermission> permissions) {
 		this.app_exchange_info = appInfo;
 		containers_cap = containers_len = permissions.size();
 		
-		container_permissions = new ContainerPermissions.ByReference();
-		ContainerPermissions[] arr = (ContainerPermissions[]) container_permissions
+		container_permissions = new FfiContainerPermission.ByReference();
+		FfiContainerPermission[] arr = (FfiContainerPermission[]) container_permissions
 				.toArray(permissions.size());
 
 		for (int i = 0; i < permissions.size(); i++) {

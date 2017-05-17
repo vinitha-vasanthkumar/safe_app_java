@@ -1,5 +1,6 @@
 package net.maidsafe.api.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContainerPermission {
@@ -9,7 +10,7 @@ public class ContainerPermission {
 	
 	public ContainerPermission(String containerName, List<Permission> permissions) {
 		this.containerName = containerName;
-		this.permissions = permissions;
+		this.permissions = permissions == null ? new ArrayList<Permission>() : permissions;
 	}
 	
 	public String getContainerName() {

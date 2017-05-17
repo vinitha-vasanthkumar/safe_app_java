@@ -30,7 +30,7 @@ public class AuthTest extends TestCase {
 		}
 	}
 
-	public void testGetAuthURIWithoutPermissionsAsNull() throws Exception {
+	public void testGetAuthURIWithPermissionsAsNull() throws Exception {
 		Auth auth;
 		AppInfo appInfo;
 		CompletableFuture<String> res;
@@ -65,7 +65,6 @@ public class AuthTest extends TestCase {
 		auth = new Auth();
 		appInfo = new AppInfo("com.maidsafe.test", "demo_app", "MaidSafe");
 		permission = new ContainerPermission("_public", Arrays.asList(Permission.Read));
-//				new ArrayList<Permission>());
 		res = auth.getURI(appInfo, Arrays.asList(permission));
 		actual = res.get();
 		assert (actual != null);

@@ -11,7 +11,7 @@ import net.maidsafe.binding.BindingFactory;
 import net.maidsafe.binding.model.AppExchangeInfo;
 import net.maidsafe.binding.model.AuthGrantedResponse;
 import net.maidsafe.binding.model.AuthReq;
-import net.maidsafe.binding.model.ContainerPermissions;
+import net.maidsafe.binding.model.FfiContainerPermission;
 import net.maidsafe.binding.model.ContainerRequest;
 import net.maidsafe.binding.model.FfiCallback;
 import net.maidsafe.binding.model.FfiResult;
@@ -32,10 +32,13 @@ public class Auth {
 			List<ContainerPermission> permissions, boolean createAppContainer) {
 		final CompletableFuture<String> future;
 		FfiCallback.Auth callback;
-		AppExchangeInfo appExchangeInfo;
-		List<ContainerPermissions> containerPermissions;
+		AppExchangeInfo appExchangeInfo;		
 		AuthReq request;
 
+		if (permissions == null) {
+			permissions = new ArrayList<>();
+		}
+		
 		future = new CompletableFuture<String>();
 		callback = new FfiCallback.Auth() {
 
@@ -52,15 +55,8 @@ public class Auth {
 		};
 
 		try {
-			appExchangeInfo = new AppExchangeInfo(appInfo);
-			containerPermissions = new ArrayList<ContainerPermissions>();
-			if (permissions != null) {
-				for (ContainerPermission permission : permissions) {
-					containerPermissions.add(new ContainerPermissions(
-							permission));
-				}
-			}
-			request = new AuthReq(appExchangeInfo, containerPermissions,
+			appExchangeInfo = new AppExchangeInfo(appInfo);			
+			request = new AuthReq(appExchangeInfo, permissions,
 					createAppContainer);
 
 			BindingFactory.getInstance().getAuth()
@@ -74,7 +70,7 @@ public class Auth {
 	public CompletableFuture<String> getContainerRequestURI(AppInfo appInfo,
 			List<ContainerPermission> permissions) {
 		AppExchangeInfo appExchInfo;
-		List<ContainerPermissions> contPermissions;
+		List<FfiContainerPermission> contPermissions;
 		FfiCallback.Auth callback;
 		final CompletableFuture<String> future;
 
@@ -87,10 +83,10 @@ public class Auth {
 		}
 
 		appExchInfo = new AppExchangeInfo(appInfo);
-		contPermissions = new ArrayList<ContainerPermissions>();
+		contPermissions = new ArrayList<FfiContainerPermission>();
 
 		for (ContainerPermission permission : permissions) {
-			contPermissions.add(new ContainerPermissions(permission));
+			contPermissions.add(new FfiContainerPermission(permission));
 		}
 		callback = new FfiCallback.Auth() {
 

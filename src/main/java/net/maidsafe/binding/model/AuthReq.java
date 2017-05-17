@@ -5,33 +5,37 @@ import com.sun.jna.Structure;
 import java.util.Arrays;
 import java.util.List;
 
+import net.maidsafe.api.model.ContainerPermission;
+
 public class AuthReq extends Structure {
 
 	public AppExchangeInfo app_exchange_info;
 	public boolean app_container;
-	public ContainerPermissions.ByReference container_permissions;
+	public FfiContainerPermission.ByReference container_permissions;
 	public long containers_len;
 	public long containers_cap;
 
 	public AuthReq(AppExchangeInfo appInfo,
-			List<ContainerPermissions> permissions, boolean createAppContainer) {
+			List<ContainerPermission> permissions, boolean createAppContainer) {
 		app_exchange_info = appInfo;
 		app_container = createAppContainer;
 		containers_cap = permissions.size();
 		containers_len = permissions.size();
 		
-		container_permissions = new ContainerPermissions.ByReference();
-		if (permissions.isEmpty()) {
+		container_permissions = new FfiContainerPermission.ByReference();
+		if (permissions == null || permissions.isEmpty()) {
 			return;
 		}
-		ContainerPermissions[] arr = (ContainerPermissions[]) container_permissions
+		FfiContainerPermission[] arr = (FfiContainerPermission[]) container_permissions
 				.toArray(permissions.size());
 
+		FfiContainerPermission temp;
 		for (int i = 0; i < permissions.size(); i++) {
-			arr[i].access = permissions.get(i).access;
-			arr[i].cont_name = permissions.get(i).cont_name;
-			arr[i].access_len = permissions.get(i).access_len;
-			arr[i].access_cap = permissions.get(i).access_cap;
+			temp = new FfiContainerPermission(permissions.get(i));
+			arr[i].access = temp.access;
+			arr[i].cont_name = temp.cont_name;
+			arr[i].access_len = temp.access_len;
+			arr[i].access_cap = temp.access_cap;
 		}
 	}
 

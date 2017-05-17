@@ -29,4 +29,15 @@ public class FfiCallback {
 		void onResponse(Pointer userData, int errorCod, int event);
 	}
 	
+	public interface HandleCallback extends Callback {
+		void onResponse(Pointer userData, FfiResult result, long handle);
+	}
+	
+	public interface ResultCallback extends Callback {
+		void onResponse(Pointer userData, FfiResult result);
+	}
+	
+	public interface PointerCallback extends Callback {
+		void onResponse(Pointer userData, FfiResult result, Pointer pointer);
+	}
 }

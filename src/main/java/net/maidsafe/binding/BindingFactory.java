@@ -5,7 +5,7 @@ import com.sun.jna.NativeLibrary;
 
 public class BindingFactory implements Cloneable {
 
-	private static BindingFactory factory;	
+	private static BindingFactory factory;
 	private final String LIB_NAME = "safe_app";
 	private final String WIN_DEP_LIB = "libwinpthread-1";
 	private static final String OS = System.getProperty("os.name")
@@ -20,7 +20,7 @@ public class BindingFactory implements Cloneable {
 
 		NativeLibrary.getInstance(LIB_NAME);
 		auth = Native.loadLibrary(AuthBinding.class);
-		// crypto = Native.loadLibrary(CryptoBinding.class);
+		crypto = Native.loadLibrary(CryptoBinding.class);
 	}
 
 	public static synchronized BindingFactory getInstance() {

@@ -5,17 +5,18 @@ import com.sun.jna.NativeLibrary;
 
 public class BindingFactory implements Cloneable {
 
-	private static BindingFactory factory;
-	// TODO set dynamic based on platform
+	private static BindingFactory factory;	
 	private final String LIB_NAME = "safe_app";
-	private final String SAFE_CORE_LIB="winpthread-1";
-	private static final String OS=System.getProperty("os.name").toLowerCase();
+	private final String WIN_DEP_LIB = "libwinpthread-1";
+	private static final String OS = System.getProperty("os.name")
+			.toLowerCase();
 	private AuthBinding auth;
 	private CryptoBinding crypto;
 
 	private BindingFactory() {
-		if(OS.contains("win"))
-		NativeLibrary.getInstance(SAFE_CORE_LIB);
+		if (OS.contains("win")) {
+			NativeLibrary.getInstance(WIN_DEP_LIB);
+		}
 
 		NativeLibrary.getInstance(LIB_NAME);
 		auth = Native.loadLibrary(AuthBinding.class);

@@ -1,5 +1,6 @@
-<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
-		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>net.maidsafe.api</groupId>
 	<artifactId>safe_app</artifactId>
@@ -29,8 +30,8 @@
 						<version>1.0</version>
 						<executions>
 							<execution>
-								<id>download-libs</id>
-								<phase>pre-integration-test</phase>
+								<id>download-libs-32</id>
+								<phase>validate</phase>
 								<goals>
 									<goal>download-single</goal>
 								</goals>
@@ -46,7 +47,7 @@
 							<!-- Downloading the libwinpthread-1 library zip -->
 							<execution>
 								<id>download-libwinpthread-1</id>
-								<phase>pre-integration-test</phase>
+								<phase>validate</phase>
 								<goals>
 									<goal>download-single</goal>
 								</goals>
@@ -61,23 +62,23 @@
 						</executions>
 					</plugin>
 
-					<!-- Unzip contents of libs downloaded and delete all except the required
-                        lib files -->
+					<!-- Unzip contents of libs downloaded and delete all except the required 
+						lib files -->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.6</version>
+						<version>1.8</version>
 						<executions>
 							<execution>
 								<id>prepare</id>
-								<phase>pre-integration-test</phase>
+								<phase>validate</phase>
 								<configuration>
-									<tasks>
-										<echo message="Extracting zipped libraries"/>
+									<target unless="${wagon.skip}">
+										<echo message="Extracting zipped libraries" />
 										<unzip
-												src="${basedir}/res/win32-x86/safe_app-dev-v0.1.0-pre30-win32-x64.zip"
-												dest="${basedir}/res/win32-x86"/>
-									</tasks>
+											src="${basedir}/res/win32-x86/safe_app-dev-v0.1.0-pre30-win32-x64.zip"
+											dest="${basedir}/res/win32-x86" />
+									</target>
 								</configuration>
 								<goals>
 									<goal>run</goal>
@@ -86,18 +87,18 @@
 
 							<!-- Extracting the downloaded libwinpthread-1 library -->
 							<execution>
-								<id>prepare</id>
-								<phase>pre-integration-test</phase>
+								<id>downloadwinpthread-32</id>
+								<phase>validate</phase>
 								<configuration>
-									<tasks>
-										<echo message="Extracting libwinpthread-1 library"/>
+									<target unless="${wagon.skip}">
+										<echo message="Extracting libwinpthread-1 library" />
 										<unzip
-												src="${basedir}/res/win32-x86/libwinpthread-1-v0.1.0-pre3-win32-ia32.zip"
-												dest="${basedir}/res/win32-x86"/>
+											src="${basedir}/res/win32-x86/libwinpthread-1-v0.1.0-pre3-win32-ia32.zip"
+											dest="${basedir}/res/win32-x86" />
 										<delete>
-											<fileset dir="${basedir}/res/win32-x86" excludes="*.dll"/>
+											<fileset dir="${basedir}/res/win32-x86" excludes="*.dll" />
 										</delete>
-									</tasks>
+									</target>
 								</configuration>
 								<goals>
 									<goal>run</goal>
@@ -108,8 +109,8 @@
 						</executions>
 					</plugin>
 
-					<!-- Maven Shade Plugin for creating a FatJar/UberJar with all transitive
-                        dependencies included -->
+					<!-- Maven Shade Plugin for creating a FatJar/UberJar with all transitive 
+						dependencies included -->
 
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -137,7 +138,6 @@
 			<activation>
 				<os>
 					<family>windows</family>
-					<arch>x86_64</arch>
 				</os>
 			</activation>
 			<build>
@@ -151,7 +151,7 @@
 						<executions>
 							<execution>
 								<id>download-libs</id>
-								<phase>pre-integration-test</phase>
+								<phase>validate</phase>
 								<goals>
 									<goal>download-single</goal>
 								</goals>
@@ -166,7 +166,7 @@
 							<!-- Downloading the libwinpthread-1 library zip -->
 							<execution>
 								<id>download-libwinpthread-1</id>
-								<phase>pre-integration-test</phase>
+								<phase>validate</phase>
 								<goals>
 									<goal>download-single</goal>
 								</goals>
@@ -182,24 +182,23 @@
 						</executions>
 					</plugin>
 
-					<!-- Unzip contents of libs downloaded and delete all except the required
-                        lib file -->
+					<!-- Unzip contents of libs downloaded and delete all except the required 
+						lib file -->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.6</version>
+						<version>1.8</version>
 						<executions>
 							<execution>
-								<id>downloadlibs</id>
-								<phase>pre-integration-test</phase>
+								<id>downloadlibs-64</id>
+								<phase>validate</phase>
 								<configuration>
-									<tasks>
-										<echo message="Extracting zipped libraries"/>
+									<target unless="${wagon.skip}">
+										<echo message="Extracting zipped libraries" />
 										<unzip
-												src="${basedir}/res/win32-x86-64/safe_app-dev-v0.1.0-pre32-win32-x64.zip"
-												dest="${basedir}/res/win32-x86-64"/>
-									</tasks>
-
+											src="${basedir}/res/win32-x86-64/safe_app-dev-v0.1.0-pre32-win32-x64.zip"
+											dest="${basedir}/res/win32-x86-64" />
+									</target>
 								</configuration>
 								<goals>
 									<goal>run</goal>
@@ -208,19 +207,18 @@
 
 							<!-- Extracting the downloaded libwinpthread-1 library -->
 							<execution>
-								<id>downloadwinpthread</id>
-								<phase>pre-integration-test</phase>
+								<id>downloadwinpthread-64</id>
+								<phase>validate</phase>
 								<configuration>
-									<tasks>
-										<echo message="Extracting winpthread-1 library"/>
+									<target unless="${wagon.skip}">
+										<echo message="Extracting winpthread-1 library" />
 										<unzip
-												src="${basedir}/res/win32-x86-64/libwinpthread-1-v0.1.0-pre3-win32-x64.zip"
-												dest="${basedir}/res/win32-x86-64"/>
+											src="${basedir}/res/win32-x86-64/libwinpthread-1-v0.1.0-pre3-win32-x64.zip"
+											dest="${basedir}/res/win32-x86-64" />
 										<delete>
-											<fileset dir="${basedir}/res/win32-x86-64" excludes="*.dll"/>
+											<fileset dir="${basedir}/res/win32-x86-64" excludes="*.dll" />
 										</delete>
-									</tasks>
-
+									</target>
 								</configuration>
 								<goals>
 									<goal>run</goal>
@@ -230,8 +228,8 @@
 						</executions>
 					</plugin>
 
-					<!-- Maven Shade Plugin for creating a FatJar/UberJar with all transitive
-                        dependencies included -->
+					<!-- Maven Shade Plugin for creating a FatJar/UberJar with all transitive 
+						dependencies included -->
 
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -277,7 +275,7 @@
 						<executions>
 							<execution>
 								<id>download-libs</id>
-								<phase>pre-integration-test</phase>
+								<phase>validate</phase>
 								<goals>
 									<goal>download-single</goal>
 								</goals>
@@ -296,21 +294,21 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.6</version>
+						<version>1.8</version>
 						<executions>
 							<execution>
 								<id>prepare</id>
-								<phase>pre-integration-test</phase>
+								<phase>validate</phase>
 								<configuration>
-									<tasks>
-										<echo message="Extracting zipped libraries"/>
+									<target unless="${wagon.skip}">
+										<echo message="Extracting zipped libraries" />
 										<unzip
-												src="${basedir}/res/linux-amd64/safe_app-dev-v0.1.0-pre32-linux-ia32.zip"
-												dest="${basedir}/res/linux-amd64"/>
+											src="${basedir}/res/linux-amd64/safe_app-dev-v0.1.0-pre32-linux-ia32.zip"
+											dest="${basedir}/res/linux-amd64" />
 										<delete>
-											<fileset dir="${basedir}/res/linux-amd64" excludes="*.so"/>
+											<fileset dir="${basedir}/res/linux-amd64" excludes="*.so" />
 										</delete>
-									</tasks>
+									</target>
 								</configuration>
 								<goals>
 									<goal>run</goal>
@@ -320,8 +318,8 @@
 					</plugin>
 
 
-					<!-- Maven Shade Plugin for creating a FatJar/UberJar with all transitive
-                        dependencies included -->
+					<!-- Maven Shade Plugin for creating a FatJar/UberJar with all transitive 
+						dependencies included -->
 
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -364,7 +362,7 @@
 						<executions>
 							<execution>
 								<id>download-libs</id>
-								<phase>pre-integration-test</phase>
+								<phase>validate</phase>
 								<goals>
 									<goal>download-single</goal>
 								</goals>
@@ -379,26 +377,26 @@
 						</executions>
 					</plugin>
 
-					<!-- Unzip contents of libs downloaded and delete all except the required
-                        lib file -->
+					<!-- Unzip contents of libs downloaded and delete all except the required 
+						lib file -->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.6</version>
+						<version>1.8</version>
 						<executions>
 							<execution>
 								<id>prepare</id>
-								<phase>pre-integration-test</phase>
+								<phase>validate</phase>
 								<configuration>
-									<tasks>
-										<echo message="Extracting zipped libraries"/>
+									<target unless="${wagon.skip}">
+										<echo message="Extracting zipped libraries" />
 										<unzip
-												src="${basedir}/res/linux-amd64/safe_app-dev-v0.1.0-pre32-linux-x64.zip"
-												dest="${basedir}/res/linux-amd64"/>
+											src="${basedir}/res/linux-amd64/safe_app-dev-v0.1.0-pre32-linux-x64.zip"
+											dest="${basedir}/res/linux-amd64" />
 										<delete>
-											<fileset dir="${basedir}/res/linux-amd64" excludes="*.so"/>
+											<fileset dir="${basedir}/res/linux-amd64" excludes="*.so" />
 										</delete>
-									</tasks>
+									</target>
 								</configuration>
 								<goals>
 									<goal>run</goal>
@@ -408,8 +406,8 @@
 					</plugin>
 
 
-					<!-- Maven Shade Plugin for creating a FatJar/UberJar with all transitive
-                        dependencies included -->
+					<!-- Maven Shade Plugin for creating a FatJar/UberJar with all transitive 
+						dependencies included -->
 
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -455,7 +453,7 @@
 						<executions>
 							<execution>
 								<id>download-libraries</id>
-								<phase>pre-integration-test</phase>
+								<phase>validate</phase>
 								<goals>
 									<goal>download-single</goal>
 								</goals>
@@ -474,21 +472,21 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.6</version>
+						<version>1.8</version>
 						<executions>
 							<execution>
 								<id>prepare</id>
-								<phase>pre-integration-test</phase>
+								<phase>validate</phase>
 								<configuration>
-									<tasks>
-										<echo message="Extracting zipped libraries"/>
+									<target unless="${wagon.skip}">
+										<echo message="Extracting zipped libraries" />
 										<unzip
-												src="${basedir}/res/darwin/safe_app-dev-v0.1.0-pre32-darwin-ia32.zip"
-												dest="${basedir}/res/darwin"/>
+											src="${basedir}/res/darwin/safe_app-dev-v0.1.0-pre32-darwin-ia32.zip"
+											dest="${basedir}/res/darwin" />
 										<delete>
-											<fileset dir="${basedir}/res/darwin" excludes="*.dylib"/>
+											<fileset dir="${basedir}/res/darwin" excludes="*.dylib" />
 										</delete>
-									</tasks>
+									</target>
 								</configuration>
 								<goals>
 									<goal>run</goal>
@@ -498,8 +496,8 @@
 					</plugin>
 
 
-					<!-- Maven Shade Plugin for creating a FatJar/UberJar with all transitive
-                        dependencies included -->
+					<!-- Maven Shade Plugin for creating a FatJar/UberJar with all transitive 
+						dependencies included -->
 
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -542,7 +540,7 @@
 						<executions>
 							<execution>
 								<id>download-libraries</id>
-								<phase>pre-integration-test</phase>
+								<phase>validate</phase>
 								<goals>
 									<goal>download-single</goal>
 								</goals>
@@ -561,21 +559,21 @@
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-antrun-plugin</artifactId>
-						<version>1.6</version>
+						<version>1.8</version>
 						<executions>
 							<execution>
 								<id>prepare</id>
-								<phase>pre-integration-test</phase>
+								<phase>validate</phase>
 								<configuration>
-									<tasks>
-										<echo message="Extracting zipped libraries"/>
+									<target unless="${wagon.skip}">
+										<echo message="Extracting zipped libraries" />
 										<unzip
-												src="${basedir}/res/darwin/safe_app-dev-v0.1.0-pre32-darwin-x64.zip"
-												dest="${basedir}/res/darwin"/>
+											src="${basedir}/res/darwin/safe_app-dev-v0.1.0-pre32-darwin-x64.zip"
+											dest="${basedir}/res/darwin" />
 										<delete>
-											<fileset dir="${basedir}/res/darwin" excludes="*.dylib"/>
+											<fileset dir="${basedir}/res/darwin" excludes="*.dylib" />
 										</delete>
-									</tasks>
+									</target>
 								</configuration>
 								<goals>
 									<goal>run</goal>
@@ -585,8 +583,8 @@
 					</plugin>
 
 
-					<!-- Maven Shade Plugin for creating a FatJar/UberJar with all transitive
-                        dependencies included -->
+					<!-- Maven Shade Plugin for creating a FatJar/UberJar with all transitive 
+						dependencies included -->
 
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -627,8 +625,17 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<environmentVariables>
+						<MOCK_ENV>true</MOCK_ENV>
+					</environmentVariables>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -651,14 +658,6 @@
 			<artifactId>jna</artifactId>
 			<version>4.4.0</version>
 		</dependency>
-
-		<!-- JNA Native Access Platform dependency-->
-		<dependency>
-			<groupId>net.java.dev.jna</groupId>
-			<artifactId>jna-platform</artifactId>
-			<version>4.4.0</version>
-		</dependency>
-
 
 	</dependencies>
 

@@ -33,4 +33,8 @@ public class App {
 	public AccessContainerMeta getAccessContainerMeta() {
 		return accessContainerMeta;
 	}
+	
+	public boolean isAnonymous() {
+		return this.keys == null;
+	}
 }

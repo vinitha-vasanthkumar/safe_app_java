@@ -12,10 +12,12 @@ import java.util.List;
 
 public class FfiContainerPermission extends Structure {
 
-	public static class ByReference extends FfiContainerPermission implements Structure.ByReference {}
-	
+	public static class ByReference extends FfiContainerPermission implements
+			Structure.ByReference {
+	}
+
 	public String cont_name;
-	public Pointer access = Pointer.NULL; 
+	public Pointer access = Pointer.NULL;
 	public long access_len;
 	public long access_cap;
 
@@ -35,8 +37,8 @@ public class FfiContainerPermission extends Structure {
 		for (int i = 0; i < permissionsCount; i++) {
 			access.setInt(i * SIZE, permission.getPermissions().get(i)
 					.ordinal());
-		}		
-//		allocateMemory();
+		}
+		// allocateMemory();
 	}
 
 	@Override

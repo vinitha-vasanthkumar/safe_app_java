@@ -12,19 +12,20 @@ public class AppExchangeInfo extends Structure {
 	public String scope;
 	public String name;
 	public String vendor;
-	
-	public AppExchangeInfo() {}
-	
+
+	public AppExchangeInfo() {
+	}
+
 	public AppExchangeInfo(AppInfo info) {
 		id = info.getId();
 		name = info.getName();
 		scope = info.getScope();
-		vendor = info.getVendor();		
+		vendor = info.getVendor();
 	}
-	
+
 	@Override
-	protected List<String> getFieldOrder() {		
+	protected List<String> getFieldOrder() {
 		return Arrays.asList("id", "scope", "name", "vendor");
 	}
-		
+
 }

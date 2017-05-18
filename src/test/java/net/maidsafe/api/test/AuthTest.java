@@ -64,7 +64,8 @@ public class AuthTest extends TestCase {
 		String actual;
 		auth = new Auth();
 		appInfo = new AppInfo("com.maidsafe.test", "demo_app", "MaidSafe");
-		permission = new ContainerPermission("_public", Arrays.asList(Permission.Read));
+		permission = new ContainerPermission("_public",
+				Arrays.asList(Permission.Read));
 		res = auth.getURI(appInfo, Arrays.asList(permission));
 		actual = res.get();
 		assert (actual != null);
@@ -153,7 +154,7 @@ public class AuthTest extends TestCase {
 				new NetworkObserver() {
 
 					@Override
-					public void onStateChange(NetworkObserver.Status event) {						
+					public void onStateChange(NetworkObserver.Status event) {
 						assertEquals(NetworkObserver.Status.CONNECTED, event);
 					}
 
@@ -177,7 +178,7 @@ public class AuthTest extends TestCase {
 				uri, new NetworkObserver() {
 
 					@Override
-					public void onStateChange(NetworkObserver.Status event) {						
+					public void onStateChange(NetworkObserver.Status event) {
 						assertEquals(NetworkObserver.Status.CONNECTED, event);
 					}
 
@@ -188,14 +189,14 @@ public class AuthTest extends TestCase {
 				});
 		assert (result.get() instanceof SafeClient);
 	}
-	
+
 	public void testCreateTestApp() {
-		Utils util = new Utils();
-		assert(util.getTestApp() instanceof SafeClient);
-		assert(util.getTestAppWithAccess() instanceof SafeClient);
-		
-		ContainerPermission publicCont = new ContainerPermission("_public", Arrays.asList(Permission.Read, Permission.Insert));
-		assert(util.getTestAppWithAccess(Arrays.asList(publicCont)) instanceof SafeClient);
+		assert (Utils.getTestApp() instanceof SafeClient);
+		assert (Utils.getTestAppWithAccess() instanceof SafeClient);
+
+		ContainerPermission publicCont = new ContainerPermission("_public",
+				Arrays.asList(Permission.Read, Permission.Insert));
+		assert (Utils.getTestAppWithAccess(Arrays.asList(publicCont)) instanceof SafeClient);
 	}
-	
+
 }

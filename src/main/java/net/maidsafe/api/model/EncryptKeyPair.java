@@ -4,7 +4,7 @@ public class EncryptKeyPair {
 
 	private SecretEncryptKey secretKey;
 	private PublicEncryptKey publicKey;
-	
+
 	public EncryptKeyPair(SecretEncryptKey secretKey, PublicEncryptKey publicKey) {
 		this.secretKey = secretKey;
 		this.publicKey = publicKey;
@@ -17,5 +17,5 @@ public class EncryptKeyPair {
 	public PublicEncryptKey getPublicKey() {
 		return publicKey;
 	}
-		
+
 }

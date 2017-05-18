@@ -9,7 +9,7 @@ public class AccessContainerMeta {
 	private long tag;
 	// Nonce
 	private byte[] nonce;
-	
+
 	public AccessContainerMeta(AccessContInfo info) {
 		id = info.id;
 		tag = info.tag;
@@ -27,5 +27,5 @@ public class AccessContainerMeta {
 	public byte[] getNonce() {
 		return nonce;
 	}
-		
+
 }

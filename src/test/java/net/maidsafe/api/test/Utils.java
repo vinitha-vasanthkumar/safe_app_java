@@ -12,7 +12,7 @@ import com.sun.jna.ptr.PointerByReference;
 
 public class Utils {
 
-	public SafeClient getTestApp() {
+	public static SafeClient getTestApp() {
 		App app = new App(null, null, null);
 		PointerByReference appPointerRef = new PointerByReference();
 		BindingFactory.getInstance().getAuth().test_create_app(appPointerRef);
@@ -20,7 +20,7 @@ public class Utils {
 		return new SafeClient(app);
 	}
 
-	public SafeClient getTestAppWithAccess() {
+	public static SafeClient getTestAppWithAccess() {
 		App app = new App(null, null, null);
 		PointerByReference appPointerRef = new PointerByReference();
 
@@ -33,7 +33,8 @@ public class Utils {
 		return new SafeClient(app);
 	}
 
-	public SafeClient getTestAppWithAccess(List<ContainerPermission> access) {
+	public static SafeClient getTestAppWithAccess(
+			List<ContainerPermission> access) {
 		App app = new App(null, null, null);
 		PointerByReference appPointerRef = new PointerByReference();
 		final FfiContainerPermission[] accessPermissions = new FfiContainerPermission[access
@@ -43,7 +44,7 @@ public class Utils {
 			accessPermissions[i] = new FfiContainerPermission(container);
 			i++;
 		}
-		
+
 		BindingFactory
 				.getInstance()
 				.getAuth()

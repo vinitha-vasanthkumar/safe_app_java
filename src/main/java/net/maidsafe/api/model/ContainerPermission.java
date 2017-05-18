@@ -7,26 +7,28 @@ public class ContainerPermission {
 
 	private String containerName;
 	private List<Permission> permissions;
-	
-	public ContainerPermission(String containerName, List<Permission> permissions) {
+
+	public ContainerPermission(String containerName,
+			List<Permission> permissions) {
 		this.containerName = containerName;
-		this.permissions = permissions == null ? new ArrayList<Permission>() : permissions;
+		this.permissions = permissions == null ? new ArrayList<Permission>()
+				: permissions;
 	}
-	
+
 	public String getContainerName() {
 		return containerName;
 	}
-	
+
 	public List<Permission> getPermissions() {
 		return permissions;
 	}
-	
+
 	public void addPermission(Permission permission) {
 		this.permissions.add(permission);
 	}
-	
+
 	public void removePermission(Permission permission) {
 		this.permissions.remove(permission);
 	}
-	
+
 }

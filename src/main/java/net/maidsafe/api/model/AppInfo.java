@@ -1,23 +1,24 @@
 package net.maidsafe.api.model;
 
 public class AppInfo {
-	
+
 	private String id;
 	private String name;
 	private String scope;
 	private String vendor;
-	
-	public AppInfo(String  id, String name, String vendor) throws Exception {
-		if (id == null || name == null || vendor == null ||
-				id.isEmpty() || name.isEmpty() || vendor.isEmpty()) {
+
+	public AppInfo(String id, String name, String vendor) throws Exception {
+		if (id == null || name == null || vendor == null || id.isEmpty()
+				|| name.isEmpty() || vendor.isEmpty()) {
 			throw new Exception("id, name, vendor can not be null or empty");
 		}
 		this.id = id;
 		this.name = name;
 		this.vendor = vendor;
 	}
-	
-	public AppInfo(String  id, String name, String vendor, String scope) throws Exception {
+
+	public AppInfo(String id, String name, String vendor, String scope)
+			throws Exception {
 		this(id, name, vendor);
 		this.scope = scope;
 	}
@@ -25,7 +26,7 @@ public class AppInfo {
 	public String getId() {
 		return id;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
@@ -37,5 +38,5 @@ public class AppInfo {
 	public String getVendor() {
 		return vendor;
 	}
-		
+
 }

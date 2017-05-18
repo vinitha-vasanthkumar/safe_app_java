@@ -6,16 +6,17 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ContainerRequest extends Structure {
-	
+
 	public AppExchangeInfo app_exchange_info;
 	public FfiContainerPermission.ByReference container_permissions;
 	public long containers_len;
 	public long containers_cap;
-	
-	public ContainerRequest(AppExchangeInfo appInfo, List<FfiContainerPermission> permissions) {
+
+	public ContainerRequest(AppExchangeInfo appInfo,
+			List<FfiContainerPermission> permissions) {
 		this.app_exchange_info = appInfo;
 		containers_cap = containers_len = permissions.size();
-		
+
 		container_permissions = new FfiContainerPermission.ByReference();
 		FfiContainerPermission[] arr = (FfiContainerPermission[]) container_permissions
 				.toArray(permissions.size());
@@ -29,9 +30,8 @@ public class ContainerRequest extends Structure {
 	}
 
 	@Override
-	protected List<String> getFieldOrder() { 
-		return Arrays.asList("app_exchange_info", 
-				"container_permissions", "containers_len", 
-				"containers_cap");
+	protected List<String> getFieldOrder() {
+		return Arrays.asList("app_exchange_info", "container_permissions",
+				"containers_len", "containers_cap");
 	}
 }

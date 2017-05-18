@@ -11,13 +11,13 @@ import net.maidsafe.utils.FfiConstant;
 
 import com.sun.jna.Pointer;
 
-public class SignKey {
+public class PublicSignKey {
 
 	private long handle;
 	private CryptoBinding lib = BindingFactory.getInstance().getCrypto();
 	private Pointer appHandle;
 	
-	public SignKey(Pointer appHandle, long handle) {
+	public PublicSignKey(Pointer appHandle, long handle) {
 		this.appHandle = appHandle;
 		this.handle = handle;
 	}

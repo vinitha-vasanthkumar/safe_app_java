@@ -3,6 +3,7 @@ package net.maidsafe.binding;
 import net.maidsafe.binding.model.FfiCallback.HandleCallback;
 import net.maidsafe.binding.model.FfiCallback.PointerCallback;
 import net.maidsafe.binding.model.FfiCallback.ResultCallback;
+import net.maidsafe.binding.model.FfiCallback.TwoHandleCallback;
 
 import com.sun.jna.Library;
 import com.sun.jna.Pointer;
@@ -19,15 +20,30 @@ public interface CryptoBinding extends Library {
 
 	void sign_key_get(Pointer app, long handle, Pointer userData,
 			PointerCallback cb);
-	// void sign_key_free();
-	// void app_pub_enc_key();
-	// void enc_generate_key_pair();
-	// void enc_pub_key_new();
-	// void enc_pub_key_get();
-	// void enc_secret_key_new();
-	// void enc_secret_key_get();
-	// void enc_pub_key_free();
-	// void enc_secret_key_free();
+	
+	void app_pub_enc_key(Pointer app, Pointer userData,
+			HandleCallback cb);
+	
+	void enc_pub_key_new(Pointer app, Pointer rawData, Pointer userData,
+			HandleCallback cb);
+	
+	void enc_generate_key_pair(Pointer app, Pointer userData, TwoHandleCallback cb);
+	
+	void enc_pub_key_get(Pointer app, long handle, Pointer userData,
+			PointerCallback cb);
+	
+	void enc_secret_key_get(Pointer app, long handle, Pointer userData,
+			PointerCallback cb);
+	
+	void enc_secret_key_new(Pointer app, Pointer rawData, Pointer userData,
+			HandleCallback cb);
+	
+	void enc_pub_key_free(Pointer app, long handle, Pointer userData,
+			ResultCallback cb);
+	
+	void enc_secret_key_free(Pointer app, long handle, Pointer userData,
+			ResultCallback cb);
+		 
 	// void encrypt();
 	// void decrypt();
 	// void encrypt_sealed_box();

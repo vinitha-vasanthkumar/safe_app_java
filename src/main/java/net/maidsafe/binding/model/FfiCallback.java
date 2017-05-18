@@ -33,6 +33,10 @@ public class FfiCallback {
 		void onResponse(Pointer userData, FfiResult result, long handle);
 	}
 	
+	public interface TwoHandleCallback extends Callback {
+		void onResponse(Pointer userData, FfiResult result, long handleOne, long handleTwo);
+	}
+	
 	public interface ResultCallback extends Callback {
 		void onResponse(Pointer userData, FfiResult result);
 	}

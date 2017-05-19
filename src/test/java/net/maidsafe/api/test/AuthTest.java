@@ -2,8 +2,6 @@ package net.maidsafe.api.test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import net.maidsafe.api.Auth;
@@ -12,7 +10,6 @@ import net.maidsafe.api.SafeClient;
 import net.maidsafe.api.model.AppInfo;
 import net.maidsafe.api.model.ContainerPermission;
 import net.maidsafe.api.model.Permission;
-import net.maidsafe.utils.Helper;
 import junit.framework.TestCase;
 
 public class AuthTest extends TestCase {
@@ -29,7 +26,6 @@ public class AuthTest extends TestCase {
 			assert (e != null);
 		}
 	}
-
 	public void testGetAuthURIWithPermissionsAsNull() throws Exception {
 		Auth auth;
 		AppInfo appInfo;
@@ -159,7 +155,7 @@ public class AuthTest extends TestCase {
 					}
 
 					@Override
-					public void onError(int errorCode) {
+					public void onError(int errorCode, String description) {
 						assertEquals(0, errorCode);
 
 					}
@@ -183,7 +179,7 @@ public class AuthTest extends TestCase {
 					}
 
 					@Override
-					public void onError(int errorCode) {
+					public void onError(int errorCode, String description) {
 						assertEquals(0, errorCode);
 					}
 				});

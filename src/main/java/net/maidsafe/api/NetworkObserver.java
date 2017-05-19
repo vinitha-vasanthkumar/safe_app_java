@@ -14,7 +14,7 @@ public abstract class NetworkObserver {
 		CONNECTED, CONNECTING, TERMINATED
 	}
 
-	private NetworkObserver instance;
+	private final NetworkObserver instance;
 	private final PointerByReference appPointerRef = new PointerByReference();
 	private final CompletableFuture<SafeClient> future = new CompletableFuture<SafeClient>();
 	private App app;
@@ -23,11 +23,15 @@ public abstract class NetworkObserver {
 
 		@Override
 		public void onResponse(Pointer userData, int errorCod, int event) {
-			if (!future.isDone()) {
+			if (!future.isDone() && errorCod == 0) {
 				app.setAppHandle(appPointerRef.getValue());
 				future.complete(new SafeClient(app));
 			}
-			instance.onStateChange(Status.values()[event]);
+			if (errorCod == 0) {
+				instance.onStateChange(Status.values()[event]);
+			} else {
+				instance.onError(errorCod, "Failed to connect");
+			}
 		}
 	};
 
@@ -53,6 +57,6 @@ public abstract class NetworkObserver {
 
 	public abstract void onStateChange(Status event);
 
-	public abstract void onError(int errorCode);
+	public abstract void onError(int errorCode, String description);
 
 }

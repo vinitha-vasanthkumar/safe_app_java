@@ -8,12 +8,12 @@ public class BindingFactory implements Cloneable {
 	private static BindingFactory factory;
 	private final String LIB_NAME = "safe_app";
 	private final String WIN_DEP_LIB = "libwinpthread-1";
-	private static final String OS = System.getProperty("os.name")
-			.toLowerCase();
-	private AuthBinding auth;
-	private CryptoBinding crypto;
+	private final AuthBinding auth;
+	private final CryptoBinding crypto;
+	private final CipherOptBinding cipherOpt;
 
 	private BindingFactory() {
+		final String OS = System.getProperty("os.name").toLowerCase();
 		if (OS.contains("win")) {
 			NativeLibrary.getInstance(WIN_DEP_LIB);
 		}
@@ -21,6 +21,7 @@ public class BindingFactory implements Cloneable {
 		NativeLibrary.getInstance(LIB_NAME);
 		auth = Native.loadLibrary(AuthBinding.class);
 		crypto = Native.loadLibrary(CryptoBinding.class);
+		cipherOpt = Native.loadLibrary(CipherOptBinding.class);
 	}
 
 	public static synchronized BindingFactory getInstance() {
@@ -36,6 +37,10 @@ public class BindingFactory implements Cloneable {
 
 	public CryptoBinding getCrypto() {
 		return crypto;
+	}
+
+	public CipherOptBinding getCipherOpt() {
+		return cipherOpt;
 	}
 
 	@Override

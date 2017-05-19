@@ -15,27 +15,27 @@ public class CryptoTest extends TestCase {
 
 	public void testAppPublicSignKey() throws Exception {
 		SafeClient client = Utils.getTestAppWithAccess();
-		PublicSignKey key = client.getCrypto().getAppPublicSignKey().get();
+		PublicSignKey key = client.crypto().getAppPublicSignKey().get();
 		assert (key != null);
 		byte[] raw = key.getRaw().get();
 		assertEquals(raw.length, FfiConstant.SIGN_PUBLICKEYBYTES);
-		key = client.getCrypto().getPublicSignKey(raw).get();
+		key = client.crypto().getPublicSignKey(raw).get();
 		assert (Arrays.equals(raw, key.getRaw().get()));
 	}
 
 	public void testAppPublicSignKeyInvalidSize() throws Exception {
 		SafeClient client = Utils.getTestAppWithAccess();
-		PublicSignKey key = client.getCrypto().getAppPublicSignKey().get();
+		PublicSignKey key = client.crypto().getAppPublicSignKey().get();
 		assert (key != null);
 		byte[] raw = key.getRaw().get();
 		assertEquals(raw.length, FfiConstant.SIGN_PUBLICKEYBYTES);
 		try {
-			client.getCrypto().getPublicSignKey(Arrays.copyOf(raw, 10)).get();
+			client.crypto().getPublicSignKey(Arrays.copyOf(raw, 10)).get();
 		} catch (Exception e) {
 			assert (e != null);
 		}
 		try {
-			client.getCrypto().getPublicSignKey(null).get();
+			client.crypto().getPublicSignKey(null).get();
 		} catch (Exception e) {
 			assert (e != null);
 		}
@@ -43,30 +43,30 @@ public class CryptoTest extends TestCase {
 
 	public void testAppPublicEncryptKey() throws Exception {
 		SafeClient client = Utils.getTestAppWithAccess();
-		PublicEncryptKey key = client.getCrypto().getAppPublicEncryptKey()
+		PublicEncryptKey key = client.crypto().getAppPublicEncryptKey()
 				.get();
 		assert (key != null);
 		byte[] raw = key.getRaw().get();
 		assertEquals(raw.length, FfiConstant.BOX_PUBLICKEYBYTES);
-		key = client.getCrypto().getPublicEncryptKey(raw).get();
+		key = client.crypto().getPublicEncryptKey(raw).get();
 		assert (Arrays.equals(raw, key.getRaw().get()));
 	}
 
 	public void testAppPublicEncryptKeyInvalidSize() throws Exception {
 		SafeClient client = Utils.getTestAppWithAccess();
-		PublicEncryptKey key = client.getCrypto().getAppPublicEncryptKey()
+		PublicEncryptKey key = client.crypto().getAppPublicEncryptKey()
 				.get();
 		assert (key != null);
 		byte[] raw = key.getRaw().get();
 		assertEquals(raw.length, FfiConstant.BOX_PUBLICKEYBYTES);
 		try {
-			client.getCrypto().getPublicEncryptKey(Arrays.copyOf(raw, 10))
+			client.crypto().getPublicEncryptKey(Arrays.copyOf(raw, 10))
 					.get();
 		} catch (Exception e) {
 			assert (e != null);
 		}
 		try {
-			client.getCrypto().getPublicEncryptKey(null).get();
+			client.crypto().getPublicEncryptKey(null).get();
 		} catch (Exception e) {
 			assert (e != null);
 		}
@@ -74,26 +74,26 @@ public class CryptoTest extends TestCase {
 
 	public void testEncryptKeyPairGeneration() throws Exception {
 		SafeClient client = Utils.getTestAppWithAccess();
-		EncryptKeyPair pair = client.getCrypto().generateEncryptKeyPair().get();
+		EncryptKeyPair pair = client.crypto().generateEncryptKeyPair().get();
 		assert (pair.getPublicKey() != null);
 		assert (pair.getSecretKey() != null);
-		client.getCrypto()
+		client.crypto()
 				.getSecretEncryptKey(pair.getSecretKey().getRaw().get()).get();
 	}
 
 	public void testSha3Hash() throws Exception {
 		String expected = "DDAD25FB24BD67C0AD883AC9C747943036EC068837C8A894E44F29244548F4ED";
 		SafeClient client = Utils.getTestAppWithAccess();
-		byte[] hash = client.getCrypto().hashSHA3("Demo".getBytes()).get();
+		byte[] hash = client.crypto().hashSHA3("Demo".getBytes()).get();
 		assertEquals(expected, DatatypeConverter.printHexBinary(hash));
 	}
 
 	public void testBoxEncryption() throws Exception {
 		SafeClient clientOne = Utils.getTestAppWithAccess();
 
-		EncryptKeyPair senderKeys = clientOne.getCrypto()
+		EncryptKeyPair senderKeys = clientOne.crypto()
 				.generateEncryptKeyPair().get();
-		EncryptKeyPair recieverKeys = clientOne.getCrypto()
+		EncryptKeyPair recieverKeys = clientOne.crypto()
 				.generateEncryptKeyPair().get();
 
 		byte[] cipherText = recieverKeys.getPublicKey()
@@ -107,7 +107,7 @@ public class CryptoTest extends TestCase {
 	public void testBoxSealedEncryption() throws Exception {
 		SafeClient clientOne = Utils.getTestAppWithAccess();
 
-		EncryptKeyPair recieverKeys = clientOne.getCrypto()
+		EncryptKeyPair recieverKeys = clientOne.crypto()
 				.generateEncryptKeyPair().get();
 
 		byte[] cipherText = recieverKeys.getPublicKey()

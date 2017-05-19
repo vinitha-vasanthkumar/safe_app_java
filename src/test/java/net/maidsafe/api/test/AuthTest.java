@@ -26,6 +26,7 @@ public class AuthTest extends TestCase {
 			assert (e != null);
 		}
 	}
+
 	public void testGetAuthURIWithPermissionsAsNull() throws Exception {
 		Auth auth;
 		AppInfo appInfo;

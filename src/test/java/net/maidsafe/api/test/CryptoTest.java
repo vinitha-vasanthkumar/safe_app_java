@@ -13,15 +13,21 @@ import net.maidsafe.utils.FfiConstant;
 
 public class CryptoTest extends TestCase {
 
-	public void testAppPublicSignKey() throws Exception {
-		SafeClient client = Utils.getTestAppWithAccess();
-		PublicSignKey key = client.crypto().getAppPublicSignKey().get();
-		assert (key != null);
-		byte[] raw = key.getRaw().get();
-		assertEquals(raw.length, FfiConstant.SIGN_PUBLICKEYBYTES);
-		key = client.crypto().getPublicSignKey(raw).get();
-		assert (Arrays.equals(raw, key.getRaw().get()));
-	}
+	/*
+	 * public void testSha3Hash() throws Exception { String expected =
+	 * "DDAD25FB24BD67C0AD883AC9C747943036EC068837C8A894E44F29244548F4ED";
+	 * SafeClient client = Utils.getTestAppWithAccess(); byte[] hash =
+	 * client.crypto().hashSHA3("Demo".getBytes()).get(); assertEquals(expected,
+	 * DatatypeConverter.printHexBinary(hash)); }
+	 * 
+	 * public void testAppPublicSignKey() throws Exception { SafeClient client =
+	 * Utils.getTestAppWithAccess(); PublicSignKey key =
+	 * client.crypto().getAppPublicSignKey().get(); assert (key != null); byte[]
+	 * raw = key.getRaw().get(); assertEquals(raw.length,
+	 * FfiConstant.SIGN_PUBLICKEYBYTES); key =
+	 * client.crypto().getPublicSignKey(raw).get(); assert (Arrays.equals(raw,
+	 * key.getRaw().get())); }
+	 */
 
 	public void testAppPublicSignKeyInvalidSize() throws Exception {
 		SafeClient client = Utils.getTestAppWithAccess();
@@ -43,8 +49,7 @@ public class CryptoTest extends TestCase {
 
 	public void testAppPublicEncryptKey() throws Exception {
 		SafeClient client = Utils.getTestAppWithAccess();
-		PublicEncryptKey key = client.crypto().getAppPublicEncryptKey()
-				.get();
+		PublicEncryptKey key = client.crypto().getAppPublicEncryptKey().get();
 		assert (key != null);
 		byte[] raw = key.getRaw().get();
 		assertEquals(raw.length, FfiConstant.BOX_PUBLICKEYBYTES);
@@ -54,14 +59,12 @@ public class CryptoTest extends TestCase {
 
 	public void testAppPublicEncryptKeyInvalidSize() throws Exception {
 		SafeClient client = Utils.getTestAppWithAccess();
-		PublicEncryptKey key = client.crypto().getAppPublicEncryptKey()
-				.get();
+		PublicEncryptKey key = client.crypto().getAppPublicEncryptKey().get();
 		assert (key != null);
 		byte[] raw = key.getRaw().get();
 		assertEquals(raw.length, FfiConstant.BOX_PUBLICKEYBYTES);
 		try {
-			client.crypto().getPublicEncryptKey(Arrays.copyOf(raw, 10))
-					.get();
+			client.crypto().getPublicEncryptKey(Arrays.copyOf(raw, 10)).get();
 		} catch (Exception e) {
 			assert (e != null);
 		}
@@ -77,22 +80,15 @@ public class CryptoTest extends TestCase {
 		EncryptKeyPair pair = client.crypto().generateEncryptKeyPair().get();
 		assert (pair.getPublicKey() != null);
 		assert (pair.getSecretKey() != null);
-		client.crypto()
-				.getSecretEncryptKey(pair.getSecretKey().getRaw().get()).get();
-	}
-
-	public void testSha3Hash() throws Exception {
-		String expected = "DDAD25FB24BD67C0AD883AC9C747943036EC068837C8A894E44F29244548F4ED";
-		SafeClient client = Utils.getTestAppWithAccess();
-		byte[] hash = client.crypto().hashSHA3("Demo".getBytes()).get();
-		assertEquals(expected, DatatypeConverter.printHexBinary(hash));
+		client.crypto().getSecretEncryptKey(pair.getSecretKey().getRaw().get())
+				.get();
 	}
 
 	public void testBoxEncryption() throws Exception {
 		SafeClient clientOne = Utils.getTestAppWithAccess();
 
-		EncryptKeyPair senderKeys = clientOne.crypto()
-				.generateEncryptKeyPair().get();
+		EncryptKeyPair senderKeys = clientOne.crypto().generateEncryptKeyPair()
+				.get();
 		EncryptKeyPair recieverKeys = clientOne.crypto()
 				.generateEncryptKeyPair().get();
 

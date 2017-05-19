@@ -1,5 +1,6 @@
 package net.maidsafe.binding;
 
+import net.maidsafe.binding.model.FfiCallback.CallbackForData;
 import net.maidsafe.binding.model.FfiCallback.HandleCallback;
 import net.maidsafe.binding.model.FfiCallback.PointerCallback;
 import net.maidsafe.binding.model.FfiCallback.ResultCallback;
@@ -44,10 +45,20 @@ public interface CryptoBinding extends Library {
 	void enc_secret_key_free(Pointer app, long handle, Pointer userData,
 			ResultCallback cb);
 
-	// void encrypt();
-	// void decrypt();
-	// void encrypt_sealed_box();
-	// void decrypt_sealed_box();
-	// void sha3_hash();
+	void encrypt(Pointer app, byte[] data, long dataLen, long publicHandle,
+			long secretHandle, Pointer userData, CallbackForData cb);
+
+	void decrypt(Pointer app, byte[] data, long dataLen, long publicHandle,
+			long secretHandle, Pointer userData, CallbackForData cb);
+
+	void encrypt_sealed_box(Pointer app, byte[] data, long dataLen,
+			long publicHandle, Pointer userData, CallbackForData cb);
+
+	void decrypt_sealed_box(Pointer app, byte[] data, long dataLen,
+			long publicHandle, long secretHandle, Pointer userData,
+			CallbackForData cb);
+
+	void sha3_hash(byte[] data, long dataLen, Pointer userData,
+			CallbackForData cb);
 
 }

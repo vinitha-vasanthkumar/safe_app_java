@@ -13,6 +13,7 @@ import net.maidsafe.binding.BindingFactory;
 import net.maidsafe.binding.CryptoBinding;
 import net.maidsafe.binding.model.FfiCallback;
 import net.maidsafe.binding.model.FfiResult;
+import net.maidsafe.binding.model.FfiCallback.CallbackForData;
 import net.maidsafe.binding.model.FfiCallback.HandleCallback;
 import net.maidsafe.utils.FfiConstant;
 
@@ -151,12 +152,35 @@ public class Crypto {
 									.errorMessage()));
 							return;
 						}
-						future.complete(new EncryptKeyPair(
+						future.complete(new EncryptKeyPair(app.getAppHandle(),
 								new SecretEncryptKey(app.getAppHandle(),
 										secretKey), new PublicEncryptKey(app
 										.getAppHandle(), publicKey)));
 					}
 				});
+		return future;
+	}
+
+	public CompletableFuture<byte[]> hashSHA3(byte[] data) {
+		final CompletableFuture<byte[]> future;
+		future = new CompletableFuture<byte[]>();
+
+		CallbackForData cb = new CallbackForData() {
+
+			@Override
+			public void onResponse(Pointer userData, FfiResult result,
+					Pointer data, long dataLen) {
+				if (result.isError()) {
+					future.completeExceptionally(new Exception(result
+							.errorMessage()));
+					return;
+				}
+				future.complete(data.getByteArray(0, (int) dataLen));
+			}
+		};
+
+		lib.sha3_hash(data, data.length, Pointer.NULL, cb);
+
 		return future;
 	}
 

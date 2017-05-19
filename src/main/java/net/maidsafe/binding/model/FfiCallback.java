@@ -47,4 +47,9 @@ public class FfiCallback {
 	public interface PointerCallback extends Callback {
 		void onResponse(Pointer userData, FfiResult result, Pointer pointer);
 	}
+
+	public interface CallbackForData extends Callback {
+		void onResponse(Pointer userData, FfiResult result, Pointer data,
+				long dataLen);
+	}
 }

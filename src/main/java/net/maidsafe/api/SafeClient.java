@@ -6,11 +6,13 @@ public class SafeClient {
 	private final App app;
 	private final Crypto crypto;
 	private final CipherOption cipherOption;
+	private final ImmutableData immutableData;
 
 	public SafeClient(App app) {
 		this.app = app;
 		crypto = new Crypto(app);
 		cipherOption = new CipherOption(app);
+		immutableData = new ImmutableData(app);
 	}
 
 	public boolean isAnonymous() {
@@ -23,6 +25,10 @@ public class SafeClient {
 
 	public CipherOption cipherOpt() {
 		return cipherOption;
+	}
+
+	public ImmutableData immutableData() {
+		return immutableData;
 	}
 
 }

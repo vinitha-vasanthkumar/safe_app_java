@@ -11,6 +11,7 @@ public class BindingFactory implements Cloneable {
 	private final AuthBinding auth;
 	private final CryptoBinding crypto;
 	private final CipherOptBinding cipherOpt;
+	private final ImmutableDataBinding immutableData;
 
 	private BindingFactory() {
 		final String OS = System.getProperty("os.name").toLowerCase();
@@ -22,6 +23,7 @@ public class BindingFactory implements Cloneable {
 		auth = Native.loadLibrary(AuthBinding.class);
 		crypto = Native.loadLibrary(CryptoBinding.class);
 		cipherOpt = Native.loadLibrary(CipherOptBinding.class);
+		immutableData = Native.loadLibrary(ImmutableDataBinding.class);
 	}
 
 	public static synchronized BindingFactory getInstance() {
@@ -41,6 +43,10 @@ public class BindingFactory implements Cloneable {
 
 	public CipherOptBinding getCipherOpt() {
 		return cipherOpt;
+	}
+
+	public ImmutableDataBinding getImmutableData() {
+		return immutableData;
 	}
 
 	@Override

@@ -32,13 +32,13 @@ public class Auth {
 			List<ContainerPermission> permissions, boolean createAppContainer) {
 		final CompletableFuture<String> future;
 		FfiCallback.Auth callback;
-		AppExchangeInfo appExchangeInfo;		
+		AppExchangeInfo appExchangeInfo;
 		AuthReq request;
 
 		if (permissions == null) {
 			permissions = new ArrayList<>();
 		}
-		
+
 		future = new CompletableFuture<String>();
 		callback = new FfiCallback.Auth() {
 
@@ -55,7 +55,7 @@ public class Auth {
 		};
 
 		try {
-			appExchangeInfo = new AppExchangeInfo(appInfo);			
+			appExchangeInfo = new AppExchangeInfo(appInfo);
 			request = new AuthReq(appExchangeInfo, permissions,
 					createAppContainer);
 
@@ -120,8 +120,8 @@ public class Auth {
 				.getInstance()
 				.getAuth()
 				.app_unregistered(null, observer.getObserver(),
-						observer.getAppRef());		
-		if (Helper.isMockEnvironment()) {			
+						observer.getAppRef());
+		if (Helper.isMockEnvironment()) {
 			observer.getObserver().onResponse(null, 0, 0);
 		}
 		return future;
@@ -147,7 +147,7 @@ public class Auth {
 							.app_registered(appInfo.getId(), authGranted, null,
 									observer.getObserver(),
 									observer.getAppRef());
-					if (Helper.isMockEnvironment()) {			
+					if (Helper.isMockEnvironment()) {
 						observer.getObserver().onResponse(null, 0, 0);
 					}
 				} catch (Exception e) {

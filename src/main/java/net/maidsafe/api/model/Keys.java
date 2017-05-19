@@ -20,7 +20,7 @@ public class Keys {
 	private byte[] encryptionPublicKey;
 	// Asymmetric enc private key.
 	private byte[] encryptionSecretKey;
-	
+
 	public Keys(AppKeys keys) {
 		this.ownerKey = keys.owner_key;
 		this.symmetricEncryptKey = keys.enc_key;

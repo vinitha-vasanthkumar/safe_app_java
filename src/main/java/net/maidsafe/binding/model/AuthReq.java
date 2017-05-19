@@ -21,7 +21,7 @@ public class AuthReq extends Structure {
 		app_container = createAppContainer;
 		containers_cap = permissions.size();
 		containers_len = permissions.size();
-		
+
 		container_permissions = new FfiContainerPermission.ByReference();
 		if (permissions == null || permissions.isEmpty()) {
 			return;

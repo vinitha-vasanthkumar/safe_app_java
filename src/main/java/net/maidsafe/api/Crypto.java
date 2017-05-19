@@ -2,7 +2,6 @@ package net.maidsafe.api;
 
 import java.util.concurrent.CompletableFuture;
 
-import com.sun.jna.Memory;
 import com.sun.jna.Pointer;
 
 import net.maidsafe.api.model.App;
@@ -14,6 +13,7 @@ import net.maidsafe.binding.BindingFactory;
 import net.maidsafe.binding.CryptoBinding;
 import net.maidsafe.binding.model.FfiCallback;
 import net.maidsafe.binding.model.FfiResult;
+import net.maidsafe.binding.model.FfiCallback.CallbackForData;
 import net.maidsafe.binding.model.FfiCallback.HandleCallback;
 import net.maidsafe.utils.FfiConstant;
 
@@ -49,9 +49,12 @@ public class Crypto {
 	public CompletableFuture<PublicSignKey> getPublicSignKey(byte[] raw) {
 		final CompletableFuture<PublicSignKey> future;
 		future = new CompletableFuture<>();
-		Pointer rawPointer = new Memory(FfiConstant.SIGN_PUBLICKEYBYTES);
-		rawPointer.write(0, raw, 0, FfiConstant.SIGN_PUBLICKEYBYTES);
-		lib.sign_key_new(app.getAppHandle(), rawPointer, Pointer.NULL,
+		if (raw == null || raw.length != FfiConstant.SIGN_PUBLICKEYBYTES) {
+			future.completeExceptionally(new Exception(
+					"Invalid argument - Invalid size or null"));
+			return future;
+		}
+		lib.sign_key_new(app.getAppHandle(), raw, Pointer.NULL,
 				new HandleCallback() {
 					@Override
 					public void onResponse(Pointer userData, FfiResult result,
@@ -92,9 +95,12 @@ public class Crypto {
 	public CompletableFuture<PublicEncryptKey> getPublicEncryptKey(byte[] raw) {
 		final CompletableFuture<PublicEncryptKey> future;
 		future = new CompletableFuture<>();
-		Pointer rawPointer = new Memory(FfiConstant.BOX_PUBLICKEYBYTES);
-		rawPointer.write(0, raw, 0, FfiConstant.BOX_PUBLICKEYBYTES);
-		lib.enc_pub_key_new(app.getAppHandle(), rawPointer, Pointer.NULL,
+		if (raw == null || raw.length != FfiConstant.BOX_PUBLICKEYBYTES) {
+			future.completeExceptionally(new Exception(
+					"Invalid size or null argument"));
+			return future;
+		}
+		lib.enc_pub_key_new(app.getAppHandle(), raw, Pointer.NULL,
 				new HandleCallback() {
 					@Override
 					public void onResponse(Pointer userData, FfiResult result,
@@ -114,9 +120,7 @@ public class Crypto {
 	public CompletableFuture<SecretEncryptKey> getSecretEncryptKey(byte[] raw) {
 		final CompletableFuture<SecretEncryptKey> future;
 		future = new CompletableFuture<>();
-		Pointer rawPointer = new Memory(FfiConstant.BOX_SECRETKEYBYTES);
-		rawPointer.write(0, raw, 0, FfiConstant.BOX_SECRETKEYBYTES);
-		lib.enc_secret_key_new(app.getAppHandle(), rawPointer, Pointer.NULL,
+		lib.enc_secret_key_new(app.getAppHandle(), raw, Pointer.NULL,
 				new HandleCallback() {
 					@Override
 					public void onResponse(Pointer userData, FfiResult result,
@@ -148,12 +152,35 @@ public class Crypto {
 									.errorMessage()));
 							return;
 						}
-						future.complete(new EncryptKeyPair(
+						future.complete(new EncryptKeyPair(app.getAppHandle(),
 								new SecretEncryptKey(app.getAppHandle(),
 										secretKey), new PublicEncryptKey(app
 										.getAppHandle(), publicKey)));
 					}
 				});
+		return future;
+	}
+
+	public CompletableFuture<byte[]> hashSHA3(byte[] data) {
+		final CompletableFuture<byte[]> future;
+		future = new CompletableFuture<byte[]>();
+
+		CallbackForData cb = new CallbackForData() {
+
+			@Override
+			public void onResponse(Pointer userData, FfiResult result,
+					Pointer data, long dataLen) {
+				if (result.isError()) {
+					future.completeExceptionally(new Exception(result
+							.errorMessage()));
+					return;
+				}
+				future.complete(data.getByteArray(0, (int) dataLen));
+			}
+		};
+
+		lib.sha3_hash(data, data.length, Pointer.NULL, cb);
+
 		return future;
 	}
 

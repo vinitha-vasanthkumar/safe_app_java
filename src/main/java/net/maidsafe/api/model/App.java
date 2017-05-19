@@ -29,11 +29,11 @@ public class App {
 	public Keys getKeys() {
 		return keys;
 	}
-	
+
 	public AccessContainerMeta getAccessContainerMeta() {
 		return accessContainerMeta;
 	}
-	
+
 	public boolean isAnonymous() {
 		return this.keys == null;
 	}

@@ -29,41 +29,53 @@ public class ImmutableDataTest extends TestCase {
 		assertEquals(sample, new String(data));
 	}
 
-	/*
-	 * public void testReadAndWriteAsSymetric() throws Exception {
-	 * ImmutableDataWriter writer; ImmutableDataReader reader; CipherOpt
-	 * cipherOpt; XorName name; SafeClient client; byte[] data; String sample =
-	 * "sample data 2" + Math.random(); System.out.println(sample);
-	 * 
-	 * client = Utils.getTestAppWithAccess();
-	 * 
-	 * writer = client.immutableData().getWriter().get(); cipherOpt =
-	 * client.cipherOpt().getSymmetric().get(); System.out.println("Writing");
-	 * writer.write(sample.getBytes()).get(); System.out.println("Wrote"); name
-	 * = writer.save(cipherOpt).get();
-	 * 
-	 * reader = client.immutableData().getReader(name).get(); data =
-	 * reader.read(0, reader.getSize().get()).get();
-	 * 
-	 * assertEquals(sample, new String(data)); }
-	 * 
-	 * public void testReadAndWriteAsAsymetric() throws Exception {
-	 * ImmutableDataWriter writer; ImmutableDataReader reader; CipherOpt
-	 * cipherOpt; XorName name; SafeClient client; byte[] data; String sample =
-	 * "sample data 3" + Math.random();
-	 * 
-	 * client = Utils.getTestAppWithAccess();
-	 * 
-	 * writer = client.immutableData().getWriter().get(); cipherOpt =
-	 * client.cipherOpt
-	 * ().getAsymmetric(client.crypto().getAppPublicEncryptKey().get()).get();
-	 * writer.write(sample.getBytes()).get(); name =
-	 * writer.save(cipherOpt).get();
-	 * 
-	 * reader = client.immutableData().getReader(name).get(); data =
-	 * reader.read(0, reader.getSize().get()).get();
-	 * 
-	 * assertEquals(sample, new String(data)); }
-	 */
+//	public void testReadAndWriteAsSymetric() throws Exception {
+//		ImmutableDataWriter writer;
+//		ImmutableDataReader reader;
+//		CipherOpt cipherOpt;
+//		XorName name;
+//		SafeClient client;
+//		byte[] data;
+//		String sample = "sample data 2" + Math.random();
+//		System.out.println(sample);
+//
+//		client = Utils.getTestAppWithAccess();
+//
+//		writer = client.immutableData().getWriter().get();
+//		cipherOpt = client.cipherOpt().getSymmetric().get();
+//		System.out.println("Writing");
+//		writer.write(sample.getBytes()).get();
+//		System.out.println("Wrote");
+//		name = writer.save(cipherOpt).get();
+//
+//		reader = client.immutableData().getReader(name).get();
+//		data = reader.read(0, reader.getSize().get()).get();
+//
+//		assertEquals(sample, new String(data));
+//	}
+//
+//	public void testReadAndWriteAsAsymetric() throws Exception {
+//		ImmutableDataWriter writer;
+//		ImmutableDataReader reader;
+//		CipherOpt cipherOpt;
+//		XorName name;
+//		SafeClient client;
+//		byte[] data;
+//		String sample = "sample data 3" + Math.random();
+//
+//		client = Utils.getTestAppWithAccess();
+//
+//		writer = client.immutableData().getWriter().get();
+//		cipherOpt = client.cipherOpt()
+//				.getAsymmetric(client.crypto().getAppPublicEncryptKey().get())
+//				.get();
+//		writer.write(sample.getBytes()).get();
+//		name = writer.save(cipherOpt).get();
+//
+//		reader = client.immutableData().getReader(name).get();
+//		data = reader.read(0, reader.getSize().get()).get();
+//
+//		assertEquals(sample, new String(data));
+//	}
 
 }

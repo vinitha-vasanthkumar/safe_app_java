@@ -7,12 +7,14 @@ public class SafeClient {
 	private final Crypto crypto;
 	private final CipherOption cipherOption;
 	private final ImmutableData immutableData;
+	private final Container accessContainer;
 
 	public SafeClient(App app) {
 		this.app = app;
 		crypto = new Crypto(app);
 		cipherOption = new CipherOption(app);
 		immutableData = new ImmutableData(app);
+		accessContainer = new Container(app);
 	}
 
 	public boolean isAnonymous() {
@@ -29,6 +31,10 @@ public class SafeClient {
 
 	public ImmutableData immutableData() {
 		return immutableData;
+	}
+
+	public Container container() {
+		return accessContainer;
 	}
 
 }

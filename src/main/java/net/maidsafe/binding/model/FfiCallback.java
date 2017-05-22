@@ -48,6 +48,10 @@ public class FfiCallback {
 		void onResponse(Pointer userData, FfiResult result, Pointer pointer);
 	}
 
+	public interface BooleanCallback extends Callback {
+		void onResponse(Pointer userData, FfiResult result, boolean flag);
+	}
+
 	public interface CallbackForData extends Callback {
 		void onResponse(Pointer userData, FfiResult result, Pointer data,
 				long dataLen);

@@ -23,8 +23,8 @@ public class ImmutableDataWriter {
 		this.handle = handle;
 	}
 
-	public CompletableFuture<Boolean> write(byte[] data) {
-		final CompletableFuture<Boolean> future = new CompletableFuture<Boolean>();
+	public CompletableFuture<Void> write(byte[] data) {
+		final CompletableFuture<Void> future = new CompletableFuture<Void>();
 		lib.idata_write_to_self_encryptor(appHandle, handle, data, data.length,
 				Pointer.NULL, new ResultCallback() {
 
@@ -35,7 +35,7 @@ public class ImmutableDataWriter {
 									.errorMessage()));
 							return;
 						}
-						future.complete(true);
+						future.complete(null);
 					}
 				});
 		return future;

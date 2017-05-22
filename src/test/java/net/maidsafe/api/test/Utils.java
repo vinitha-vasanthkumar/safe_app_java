@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.maidsafe.api.SafeClient;
 import net.maidsafe.api.model.App;
+import net.maidsafe.api.model.AppInfo;
 import net.maidsafe.api.model.ContainerPermission;
 import net.maidsafe.binding.BindingFactory;
 import net.maidsafe.binding.model.FfiContainerPermission;
@@ -20,8 +21,9 @@ public class Utils {
 		return new SafeClient(app);
 	}
 
-	public static SafeClient getTestAppWithAccess() {
-		App app = new App(null, null, null);
+	public static SafeClient getTestAppWithAccess() throws Exception {
+		App app = new App(new AppInfo("com.maidsafe.test.app", "Test App",
+				"MaidSafe"), null, null);
 		PointerByReference appPointerRef = new PointerByReference();
 
 		BindingFactory
@@ -34,8 +36,8 @@ public class Utils {
 	}
 
 	public static SafeClient getTestAppWithAccess(
-			List<ContainerPermission> access) {
-		App app = new App(null, null, null);
+			List<ContainerPermission> access) throws Exception {
+		App app = new App(new AppInfo(null, null, null), null, null);
 		PointerByReference appPointerRef = new PointerByReference();
 		final FfiContainerPermission[] accessPermissions = new FfiContainerPermission[access
 				.size()];

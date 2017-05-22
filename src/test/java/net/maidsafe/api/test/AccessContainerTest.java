@@ -24,25 +24,31 @@ public class AccessContainerTest extends TestCase {
 						.asList(Permission.Read))));
 		List<String> containers = client.container().getContainers().get();
 		assertEquals(false, containers.isEmpty());
-		assertEquals(2, containers.size());			
+		assertEquals(2, containers.size());
 	}
-	
+
 	public void testGetContainer() throws Exception {
 		SafeClient client = Utils.getTestAppWithAccess(Arrays
-				.asList(new ContainerPermission("_public", Arrays
-						.asList(Permission.Read, Permission.Delete))));
-		
-		assertEquals(new Boolean(true), client.container().hasAccess("_public", Arrays.asList(Permission.Read, Permission.Delete)).get());
+				.asList(new ContainerPermission("_public", Arrays.asList(
+						Permission.Read, Permission.Delete))));
+
+		assertEquals(
+				new Boolean(true),
+				client.container()
+						.hasAccess(
+								"_public",
+								Arrays.asList(Permission.Read,
+										Permission.Delete)).get());
 		MutableData md = client.container().getContainer("_public").get();
-		assertEquals(false, md == null);	
+		assertEquals(false, md == null);
 	}
-	
-	public void testGetAppContainer() throws Exception {
-		SafeClient client = Utils.getTestAppWithAccess(Arrays
-				.asList(new ContainerPermission("_public", Arrays
-						.asList(Permission.Read))));
-		MutableData md = client.container().getAppContainer().get();
-		assertEquals(false, md == null);			
-	}
+
+	// public void testGetAppContainer() throws Exception {
+	// SafeClient client = Utils.getTestAppWithAccess(Arrays
+	// .asList(new ContainerPermission("_public", Arrays
+	// .asList(Permission.Read))));
+	// MutableData md = client.container().getAppContainer().get();
+	// assertEquals(false, md == null);
+	// }
 
 }

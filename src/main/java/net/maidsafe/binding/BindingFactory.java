@@ -50,7 +50,7 @@ public class BindingFactory implements Cloneable {
 	public ImmutableDataBinding getImmutableData() {
 		return immutableData;
 	}
-	
+
 	public AccessContainerBinding getAccessContainer() {
 		return accessContainer;
 	}

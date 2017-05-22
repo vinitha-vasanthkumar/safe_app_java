@@ -107,7 +107,6 @@ public class Container {
 		if (scope != null && !scope.isEmpty()) {
 			appName = "/" + scope;
 		}
-		;
 
 		accessBinding.access_container_get_container_mdata_info(
 				app.getAppHandle(), appName, Pointer.NULL,
@@ -139,35 +138,37 @@ public class Container {
 			public void accept(Permission permission) {
 				permResults.add(hasAccess(containerName, permission));
 			}
-			
-		});
-		CompletableFuture<?>[] temp = new CompletableFuture<?>[permResults.size()];		
-		CompletableFuture.allOf(permResults.toArray(temp)).thenAccept(new Consumer<Void>() {
 
-			@Override
-			public void accept(Void t) {
-				for (CompletableFuture<Boolean> permResult : permResults) {
-					try {
-						if (!permResult.get()) {
-							future.complete(false);
-							return;
+		});
+		CompletableFuture<?>[] temp = new CompletableFuture<?>[permResults
+				.size()];
+		CompletableFuture.allOf(permResults.toArray(temp))
+				.thenAccept(new Consumer<Void>() {
+
+					@Override
+					public void accept(Void t) {
+						for (CompletableFuture<Boolean> permResult : permResults) {
+							try {
+								if (!permResult.get()) {
+									future.complete(false);
+									return;
+								}
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
 						}
-					} catch (Exception e) {						
-						e.printStackTrace();
+						future.complete(true);
 					}
-				}
-				future.complete(true);
-			}
-			
-		}).exceptionally(new Function<Throwable, Void>() {
 
-			@Override
-			public Void apply(Throwable t) {
-				future.completeExceptionally(t);
-				return null;				
-			}
-			
-		});
+				}).exceptionally(new Function<Throwable, Void>() {
+
+					@Override
+					public Void apply(Throwable t) {
+						future.completeExceptionally(t);
+						return null;
+					}
+
+				});
 		return future;
 	}
 
@@ -175,7 +176,8 @@ public class Container {
 			Permission permission) {
 		final CompletableFuture<Boolean> future = new CompletableFuture<Boolean>();
 		accessBinding.access_container_is_permitted(app.getAppHandle(),
-				containerName, permission.ordinal(), Pointer.NULL, new BooleanCallback() {
+				containerName, permission.ordinal(), Pointer.NULL,
+				new BooleanCallback() {
 
 					@Override
 					public void onResponse(Pointer userData, FfiResult result,
@@ -185,7 +187,7 @@ public class Container {
 									.errorMessage()));
 							return;
 						}
-						future.complete(flag);					
+						future.complete(flag);
 					}
 				});
 

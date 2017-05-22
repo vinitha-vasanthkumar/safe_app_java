@@ -18,14 +18,14 @@ public class ImmutableDataTest extends TestCase {
 		byte[] data;
 		String sample = "sample data" + Math.random();
 		client = Utils.getTestAppWithAccess();
-				
-		writer = client.immutableData().getWriter().get();		
-		cipherOpt = client.cipherOpt().getPlain().get();		
-		writer.write(sample.getBytes()).get();		
-		name = writer.save(cipherOpt).get();		
-		reader = client.immutableData().getReader(name).get();		
-		long size = reader.getSize().get();		
-		data = reader.read(0, size).get();		
+
+		writer = client.immutableData().getWriter().get();
+		cipherOpt = client.cipherOpt().getPlain().get();
+		writer.write(sample.getBytes()).get();
+		name = writer.save(cipherOpt).get();
+		reader = client.immutableData().getReader(name).get();
+		long size = reader.getSize().get();
+		data = reader.read(0, size).get();
 		assertEquals(sample, new String(data));
 	}
 

@@ -187,7 +187,7 @@ public class AuthTest extends TestCase {
 		assert (result.get() instanceof SafeClient);
 	}
 
-	public void testCreateTestApp() {
+	public void testCreateTestApp() throws Exception {
 		assert (Utils.getTestApp() instanceof SafeClient);
 		assert (Utils.getTestAppWithAccess() instanceof SafeClient);
 

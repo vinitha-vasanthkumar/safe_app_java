@@ -37,7 +37,7 @@ public class Utils {
 
 	public static SafeClient getTestAppWithAccess(
 			List<ContainerPermission> access) throws Exception {
-		App app = new App(new AppInfo(null, null, null), null, null);
+		App app = new App(new AppInfo("com.maidsafe", "Test App", "Maidsafe"), null, null);
 		PointerByReference appPointerRef = new PointerByReference();
 		final FfiContainerPermission[] accessPermissions = new FfiContainerPermission[access
 				.size()];

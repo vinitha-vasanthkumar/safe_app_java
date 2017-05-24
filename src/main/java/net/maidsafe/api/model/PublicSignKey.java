@@ -32,8 +32,8 @@ public class PublicSignKey {
 				new PointerCallback() {
 
 					@Override
-					public void onResponse(Pointer userData, FfiResult result,
-							Pointer pointer) {
+					public void onResponse(Pointer userData,
+							FfiResult.ByVal result, Pointer pointer) {
 						if (result.isError()) {
 							future.completeExceptionally(new Exception(result
 									.errorMessage()));
@@ -52,7 +52,8 @@ public class PublicSignKey {
 		lib.sign_key_free(appHandle, handle, Pointer.NULL,
 				new ResultCallback() {
 					@Override
-					public void onResponse(Pointer userData, FfiResult result) {
+					public void onResponse(Pointer userData,
+							FfiResult.ByVal result) {
 					}
 				});
 	}

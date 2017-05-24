@@ -13,21 +13,22 @@ import net.maidsafe.utils.FfiConstant;
 
 public class CryptoTest extends TestCase {
 
-	/*
-	 * public void testSha3Hash() throws Exception { String expected =
-	 * "DDAD25FB24BD67C0AD883AC9C747943036EC068837C8A894E44F29244548F4ED";
-	 * SafeClient client = Utils.getTestAppWithAccess(); byte[] hash =
-	 * client.crypto().hashSHA3("Demo".getBytes()).get(); assertEquals(expected,
-	 * DatatypeConverter.printHexBinary(hash)); }
-	 * 
-	 * public void testAppPublicSignKey() throws Exception { SafeClient client =
-	 * Utils.getTestAppWithAccess(); PublicSignKey key =
-	 * client.crypto().getAppPublicSignKey().get(); assert (key != null); byte[]
-	 * raw = key.getRaw().get(); assertEquals(raw.length,
-	 * FfiConstant.SIGN_PUBLICKEYBYTES); key =
-	 * client.crypto().getPublicSignKey(raw).get(); assert (Arrays.equals(raw,
-	 * key.getRaw().get())); }
-	 */
+	public void testSha3Hash() throws Exception {
+		String expected = "DDAD25FB24BD67C0AD883AC9C747943036EC068837C8A894E44F29244548F4ED";
+		SafeClient client = Utils.getTestAppWithAccess();
+		byte[] hash = client.crypto().hashSHA3("Demo".getBytes()).get();
+		assertEquals(expected, DatatypeConverter.printHexBinary(hash));
+	}
+
+	public void testAppPublicSignKey() throws Exception {
+		SafeClient client = Utils.getTestAppWithAccess();
+		PublicSignKey key = client.crypto().getAppPublicSignKey().get();
+		assert (key != null);
+		byte[] raw = key.getRaw().get();
+		assertEquals(raw.length, FfiConstant.SIGN_PUBLICKEYBYTES);
+		key = client.crypto().getPublicSignKey(raw).get();
+		assert (Arrays.equals(raw, key.getRaw().get()));
+	}
 
 	public void testAppPublicSignKeyInvalidSize() throws Exception {
 		SafeClient client = Utils.getTestAppWithAccess();
@@ -112,4 +113,5 @@ public class CryptoTest extends TestCase {
 
 		assertEquals(new String(plainText), "message");
 	}
+
 }

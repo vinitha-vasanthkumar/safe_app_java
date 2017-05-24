@@ -29,7 +29,7 @@ public class ImmutableDataWriter {
 				Pointer.NULL, new ResultCallback() {
 
 					@Override
-					public void onResponse(Pointer userData, FfiResult result) {
+					public void onResponse(Pointer userData, FfiResult.ByVal result) {
 						if (result.isError()) {
 							future.completeExceptionally(new Exception(result
 									.errorMessage()));
@@ -51,7 +51,7 @@ public class ImmutableDataWriter {
 				cipherOpt.getHandle(), Pointer.NULL, new PointerCallback() {
 
 					@Override
-					public void onResponse(Pointer userData, FfiResult result,
+					public void onResponse(Pointer userData, FfiResult.ByVal result,
 							Pointer pointer) {
 						if (result.isError()) {
 							future.completeExceptionally(new Exception(result
@@ -72,7 +72,7 @@ public class ImmutableDataWriter {
 				new ResultCallback() {
 
 					@Override
-					public void onResponse(Pointer userData, FfiResult result) {
+					public void onResponse(Pointer userData, FfiResult.ByVal result) {
 					}
 				});
 	}

@@ -10,6 +10,8 @@ import net.maidsafe.api.model.ContainerPermission;
 import java.util.Arrays;
 import java.util.List;
 
+import jdk.nashorn.internal.objects.NativeString;
+
 public class FfiContainerPermission extends Structure {
 
 	public static class ByReference extends FfiContainerPermission implements
@@ -38,6 +40,7 @@ public class FfiContainerPermission extends Structure {
 			access.setInt(i * SIZE, permission.getPermissions().get(i)
 					.ordinal());
 		}
+		
 		// allocateMemory();
 	}
 

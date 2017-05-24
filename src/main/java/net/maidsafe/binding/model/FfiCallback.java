@@ -6,7 +6,7 @@ import com.sun.jna.Pointer;
 public class FfiCallback {
 
 	public interface Auth extends Callback {
-		void onResponse(Pointer userData, FfiResult result, int reqId,
+		void onResponse(Pointer userData, FfiResult.ByVal result, int reqId,
 				String uri);
 	}
 
@@ -24,7 +24,7 @@ public class FfiCallback {
 	}
 
 	public interface ErrorCallback extends Callback {
-		void onResponse(Pointer userData, FfiResult result, int reqId);
+		void onResponse(Pointer userData, FfiResult.ByVal result, int reqId);
 	}
 
 	public interface NetworkObserverCallback extends Callback {
@@ -32,28 +32,28 @@ public class FfiCallback {
 	}
 
 	public interface HandleCallback extends Callback {
-		void onResponse(Pointer userData, FfiResult result, long handle);
+		void onResponse(Pointer userData, FfiResult.ByVal result, long handle);
 	}
 
 	public interface TwoHandleCallback extends Callback {
-		void onResponse(Pointer userData, FfiResult result, long handleOne,
+		void onResponse(Pointer userData, FfiResult.ByVal result, long handleOne,
 				long handleTwo);
 	}
 
 	public interface ResultCallback extends Callback {
-		void onResponse(Pointer userData, FfiResult result);
+		void onResponse(Pointer userData, FfiResult.ByVal result);
 	}
 
 	public interface PointerCallback extends Callback {
-		void onResponse(Pointer userData, FfiResult result, Pointer pointer);
+		void onResponse(Pointer userData, FfiResult.ByVal result, Pointer pointer);
 	}
 
 	public interface BooleanCallback extends Callback {
-		void onResponse(Pointer userData, FfiResult result, boolean flag);
+		void onResponse(Pointer userData, FfiResult.ByVal result, boolean flag);
 	}
 
 	public interface CallbackForData extends Callback {
-		void onResponse(Pointer userData, FfiResult result, Pointer data,
+		void onResponse(Pointer userData, FfiResult.ByVal result, Pointer data,
 				long dataLen);
 	}
 }

@@ -30,7 +30,7 @@ public class CipherOpt {
 				new ResultCallback() {
 
 					@Override
-					public void onResponse(Pointer userData, FfiResult result) {
+					public void onResponse(Pointer userData, FfiResult.ByVal result) {
 					}
 				});
 	}

@@ -40,7 +40,7 @@ public class Container {
 				Pointer.NULL, new CallbackForData() {
 
 					@Override
-					public void onResponse(Pointer userData, FfiResult result,
+					public void onResponse(Pointer userData, FfiResult.ByVal result,
 							Pointer data, long dataLen) {
 						if (result.isError()) {
 							future.completeExceptionally(new Exception(result
@@ -62,7 +62,7 @@ public class Container {
 				Pointer.NULL, new ResultCallback() {
 
 					@Override
-					public void onResponse(Pointer userData, FfiResult result) {
+					public void onResponse(Pointer userData, FfiResult.ByVal result) {
 						if (result.isError()) {
 							future.completeExceptionally(new Exception(result
 									.errorMessage()));
@@ -84,7 +84,7 @@ public class Container {
 				new HandleCallback() {
 
 					@Override
-					public void onResponse(Pointer userData, FfiResult result,
+					public void onResponse(Pointer userData, FfiResult.ByVal result,
 							long handle) {
 						if (result.isError()) {
 							future.completeExceptionally(new Exception(result
@@ -113,7 +113,7 @@ public class Container {
 				new HandleCallback() {
 
 					@Override
-					public void onResponse(Pointer userData, FfiResult result,
+					public void onResponse(Pointer userData, FfiResult.ByVal result,
 							long handle) {
 						if (result.isError()) {
 							future.completeExceptionally(new Exception(result
@@ -180,7 +180,7 @@ public class Container {
 				new BooleanCallback() {
 
 					@Override
-					public void onResponse(Pointer userData, FfiResult result,
+					public void onResponse(Pointer userData, FfiResult.ByVal result,
 							boolean flag) {
 						if (result.isError()) {
 							future.completeExceptionally(new Exception(result

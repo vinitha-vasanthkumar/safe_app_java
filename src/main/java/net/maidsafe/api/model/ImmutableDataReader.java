@@ -28,7 +28,7 @@ public class ImmutableDataReader {
 		lib.idata_size(appHandle, handle, Pointer.NULL, new HandleCallback() {
 
 			@Override
-			public void onResponse(Pointer userData, FfiResult result,
+			public void onResponse(Pointer userData, FfiResult.ByVal result,
 					long handle) {
 				if (result.isError()) {
 					future.completeExceptionally(new Exception(result
@@ -47,7 +47,7 @@ public class ImmutableDataReader {
 				lengthToRead, Pointer.NULL, new CallbackForData() {
 
 					@Override
-					public void onResponse(Pointer userData, FfiResult result,
+					public void onResponse(Pointer userData, FfiResult.ByVal result,
 							Pointer data, long dataLen) {
 						if (result.isError()) {
 							future.completeExceptionally(new Exception(result
@@ -67,7 +67,7 @@ public class ImmutableDataReader {
 				new ResultCallback() {
 
 					@Override
-					public void onResponse(Pointer userData, FfiResult result) {
+					public void onResponse(Pointer userData, FfiResult.ByVal result) {
 					}
 				});
 	}

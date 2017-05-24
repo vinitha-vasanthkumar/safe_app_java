@@ -6,8 +6,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class FfiResult extends Structure {
+		
+	
 	public int error_code;
 	public String description;
+	
 
 	@Override
 	protected List<String> getFieldOrder() {
@@ -21,4 +24,7 @@ public class FfiResult extends Structure {
 	public String errorMessage() {
 		return String.format("Err: %d - %s", this.error_code, this.description);
 	}
+	
+	public static class ByRef extends FfiResult implements Structure.ByReference {};
+    public static class ByVal extends FfiResult implements Structure.ByValue {};
 }

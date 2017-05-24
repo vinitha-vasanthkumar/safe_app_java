@@ -59,7 +59,7 @@ public class CipherOption {
 		return new HandleCallback() {
 
 			@Override
-			public void onResponse(Pointer userData, FfiResult result,
+			public void onResponse(Pointer userData, FfiResult.ByVal result,
 					long handle) {
 				if (result.isError()) {
 					future.completeExceptionally(new Exception(result

@@ -47,7 +47,7 @@ public class EncryptKeyPair {
 		return new CallbackForData() {
 
 			@Override
-			public void onResponse(Pointer userData, FfiResult result,
+			public void onResponse(Pointer userData, FfiResult.ByVal result,
 					Pointer data, long dataLen) {
 				if (result.isError()) {
 					future.completeExceptionally(new Exception(result

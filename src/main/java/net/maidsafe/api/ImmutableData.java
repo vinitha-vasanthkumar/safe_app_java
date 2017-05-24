@@ -30,8 +30,8 @@ public class ImmutableData {
 				new HandleCallback() {
 
 					@Override
-					public void onResponse(Pointer userData, FfiResult.ByVal result,
-							long handle) {
+					public void onResponse(Pointer userData,
+							FfiResult.ByVal result, long handle) {
 						if (result.isError()) {
 							future.completeExceptionally(new Exception(result
 									.errorMessage()));
@@ -53,8 +53,8 @@ public class ImmutableData {
 				Pointer.NULL, new HandleCallback() {
 
 					@Override
-					public void onResponse(Pointer userData, FfiResult.ByVal result,
-							long handle) {
+					public void onResponse(Pointer userData,
+							FfiResult.ByVal result, long handle) {
 						if (result.isError()) {
 							future.completeExceptionally(new Exception(result
 									.errorMessage()));

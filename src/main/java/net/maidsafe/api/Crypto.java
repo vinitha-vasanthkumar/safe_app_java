@@ -32,8 +32,8 @@ public class Crypto {
 		lib.app_pub_sign_key(app.getAppHandle(), Pointer.NULL,
 				new HandleCallback() {
 					@Override
-					public void onResponse(Pointer userData, FfiResult.ByVal result,
-							long handle) {
+					public void onResponse(Pointer userData,
+							FfiResult.ByVal result, long handle) {
 						if (result.isError()) {
 							future.completeExceptionally(new Exception(result
 									.errorMessage()));
@@ -57,8 +57,8 @@ public class Crypto {
 		lib.sign_key_new(app.getAppHandle(), raw, Pointer.NULL,
 				new HandleCallback() {
 					@Override
-					public void onResponse(Pointer userData, FfiResult.ByVal result,
-							long handle) {
+					public void onResponse(Pointer userData,
+							FfiResult.ByVal result, long handle) {
 						if (result.isError()) {
 							future.completeExceptionally(new Exception(result
 									.errorMessage()));
@@ -78,8 +78,8 @@ public class Crypto {
 				new HandleCallback() {
 
 					@Override
-					public void onResponse(Pointer userData, FfiResult.ByVal result,
-							long handle) {
+					public void onResponse(Pointer userData,
+							FfiResult.ByVal result, long handle) {
 						if (result.isError()) {
 							future.completeExceptionally(new Exception(result
 									.errorMessage()));
@@ -103,8 +103,8 @@ public class Crypto {
 		lib.enc_pub_key_new(app.getAppHandle(), raw, Pointer.NULL,
 				new HandleCallback() {
 					@Override
-					public void onResponse(Pointer userData, FfiResult.ByVal result,
-							long handle) {
+					public void onResponse(Pointer userData,
+							FfiResult.ByVal result, long handle) {
 						if (result.isError()) {
 							future.completeExceptionally(new Exception(result
 									.errorMessage()));
@@ -123,8 +123,8 @@ public class Crypto {
 		lib.enc_secret_key_new(app.getAppHandle(), raw, Pointer.NULL,
 				new HandleCallback() {
 					@Override
-					public void onResponse(Pointer userData, FfiResult.ByVal result,
-							long handle) {
+					public void onResponse(Pointer userData,
+							FfiResult.ByVal result, long handle) {
 						if (result.isError()) {
 							future.completeExceptionally(new Exception(result
 									.errorMessage()));
@@ -145,8 +145,9 @@ public class Crypto {
 				new FfiCallback.TwoHandleCallback() {
 
 					@Override
-					public void onResponse(Pointer userData, FfiResult.ByVal result,
-							long publicKey, long secretKey) {
+					public void onResponse(Pointer userData,
+							FfiResult.ByVal result, long publicKey,
+							long secretKey) {
 						if (result.isError()) {
 							future.completeExceptionally(new Exception(result
 									.errorMessage()));

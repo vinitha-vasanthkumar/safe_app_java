@@ -75,12 +75,12 @@ public class Auth {
 		final CompletableFuture<String> future;
 
 		future = new CompletableFuture<String>();
-		
+
 		if (permissions == null || permissions.isEmpty()) {
 			future.completeExceptionally(new Exception(
 					"Containers can not be empty"));
 			return future;
-		}			
+		}
 
 		appExchInfo = new AppExchangeInfo(appInfo);
 		contPermissions = new ArrayList<FfiContainerPermission>();
@@ -177,7 +177,8 @@ public class Auth {
 		FfiCallback.ErrorCallback errCb = new FfiCallback.ErrorCallback() {
 
 			@Override
-			public void onResponse(Pointer userData, FfiResult.ByVal result, int reqId) {
+			public void onResponse(Pointer userData, FfiResult.ByVal result,
+					int reqId) {
 				future.completeExceptionally(new Exception(result
 						.errorMessage()));
 

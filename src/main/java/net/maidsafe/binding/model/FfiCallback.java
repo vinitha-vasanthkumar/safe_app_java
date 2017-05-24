@@ -36,8 +36,8 @@ public class FfiCallback {
 	}
 
 	public interface TwoHandleCallback extends Callback {
-		void onResponse(Pointer userData, FfiResult.ByVal result, long handleOne,
-				long handleTwo);
+		void onResponse(Pointer userData, FfiResult.ByVal result,
+				long handleOne, long handleTwo);
 	}
 
 	public interface ResultCallback extends Callback {
@@ -45,7 +45,8 @@ public class FfiCallback {
 	}
 
 	public interface PointerCallback extends Callback {
-		void onResponse(Pointer userData, FfiResult.ByVal result, Pointer pointer);
+		void onResponse(Pointer userData, FfiResult.ByVal result,
+				Pointer pointer);
 	}
 
 	public interface BooleanCallback extends Callback {

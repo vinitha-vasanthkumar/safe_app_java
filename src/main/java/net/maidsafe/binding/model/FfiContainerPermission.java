@@ -40,7 +40,7 @@ public class FfiContainerPermission extends Structure {
 			access.setInt(i * SIZE, permission.getPermissions().get(i)
 					.ordinal());
 		}
-		
+
 		// allocateMemory();
 	}
 

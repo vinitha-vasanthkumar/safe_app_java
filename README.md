@@ -8,7 +8,7 @@ safe_app java library.
 
 ### Prerequisites
 
-safe_app_java is compatible with **Java 7 and above**.
+safe_app_java is compatible with **Java 8**.
 
 Maven must be [installed and configured](https://maven.apache.org/install.html).
 

@@ -88,30 +88,33 @@ public class CryptoTest extends TestCase {
 	public void testBoxEncryption() throws Exception {
 		SafeClient clientOne = Utils.getTestAppWithAccess();
 
+		final String input = "message " + Math.random();
+		final byte[] rawInput = input.getBytes();
+
 		EncryptKeyPair senderKeys = clientOne.crypto().generateEncryptKeyPair()
 				.get();
-		EncryptKeyPair recieverKeys = clientOne.crypto()
+		EncryptKeyPair receiverKeys = clientOne.crypto()
 				.generateEncryptKeyPair().get();
 
-		byte[] cipherText = recieverKeys.getPublicKey()
-				.encrypt("message".getBytes(), senderKeys.getSecretKey()).get();
-		byte[] plainText = recieverKeys.getSecretKey()
+		byte[] cipherText = receiverKeys.getPublicKey()
+				.encrypt(rawInput, senderKeys.getSecretKey()).get();
+		byte[] plainText = receiverKeys.getSecretKey()
 				.decrypt(cipherText, senderKeys.getPublicKey()).get();
 
-		assertEquals(new String(plainText), "message");
+		assert (Arrays.equals(plainText, rawInput));
 	}
 
-	public void testBoxSealedEncryption() throws Exception {
-		SafeClient clientOne = Utils.getTestAppWithAccess();
-
-		EncryptKeyPair recieverKeys = clientOne.crypto()
-				.generateEncryptKeyPair().get();
-
-		byte[] cipherText = recieverKeys.getPublicKey()
-				.encryptSealed("message".getBytes()).get();
-		byte[] plainText = recieverKeys.decryptSealed(cipherText).get();
-
-		assertEquals(new String(plainText), "message");
-	}
+//	public void testBoxSealedEncryption() throws Exception {
+//		SafeClient clientOne = Utils.getTestAppWithAccess();
+//
+//		EncryptKeyPair recieverKeys = clientOne.crypto()
+//				.generateEncryptKeyPair().get();
+//
+//		byte[] cipherText = recieverKeys.getPublicKey()
+//				.encryptSealed("message".getBytes()).get();
+//		byte[] plainText = recieverKeys.decryptSealed(cipherText).get();
+//
+//		assertEquals(new String(plainText), "message");
+//	}
 
 }

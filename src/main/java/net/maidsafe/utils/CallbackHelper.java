@@ -48,6 +48,7 @@ public class CallbackHelper implements Cloneable {
 				removeFromPool(this);
 				if (result.isError()) {
 					future.completeExceptionally(new Exception(result));
+					return;
 				}
 				future.complete(new AuthUriResponse(reqId, uri));
 			}
@@ -68,6 +69,7 @@ public class CallbackHelper implements Cloneable {
 				}
 				if (result.isError()) {
 					future.completeExceptionally(new Exception(result));
+					return;
 				}
 				future.complete(null);
 			}
@@ -85,6 +87,7 @@ public class CallbackHelper implements Cloneable {
 				removeFromPool(this);
 				if (result.isError()) {
 					future.completeExceptionally(new Exception(result));
+					return;
 				}
 				future.complete(handle);
 			}
@@ -103,6 +106,7 @@ public class CallbackHelper implements Cloneable {
 				removeFromPool(this);
 				if (result.isError()) {
 					future.completeExceptionally(new Exception(result));
+					return;
 				}
 				future.complete(Arrays.asList(handleOne, handleTwo));
 			}
@@ -121,6 +125,7 @@ public class CallbackHelper implements Cloneable {
 				removeFromPool(this);
 				if (result.isError()) {
 					future.completeExceptionally(new Exception(result));
+					return;
 				}
 				future.complete(pointer);
 			}
@@ -138,6 +143,7 @@ public class CallbackHelper implements Cloneable {
 				removeFromPool(this);
 				if (result.isError()) {
 					future.completeExceptionally(new Exception(result));
+					return;
 				}
 				future.complete(flag);
 			}
@@ -156,6 +162,7 @@ public class CallbackHelper implements Cloneable {
 				removeFromPool(this);
 				if (result.isError()) {
 					future.completeExceptionally(new Exception(result));
+					return;
 				}
 				future.complete(data.getByteArray(0, (int) dataLen));
 			}
@@ -174,6 +181,7 @@ public class CallbackHelper implements Cloneable {
 				removeFromPool(this);
 				if (result.isError()) {
 					future.completeExceptionally(new Exception(result));
+					return;
 				}
 				future.complete(Arrays.asList(data.getStringArray(0,
 						(int) dataLen)));

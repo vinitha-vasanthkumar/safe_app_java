@@ -4,18 +4,16 @@ import java.util.concurrent.CompletableFuture;
 
 import net.maidsafe.binding.BindingFactory;
 import net.maidsafe.binding.ImmutableDataBinding;
-import net.maidsafe.binding.model.FfiCallback.CallbackForData;
-import net.maidsafe.binding.model.FfiCallback.HandleCallback;
-import net.maidsafe.binding.model.FfiResult;
-import net.maidsafe.binding.model.FfiCallback.ResultCallback;
 
 import com.sun.jna.Pointer;
+import net.maidsafe.utils.CallbackHelper;
 
 public class ImmutableDataReader {
 
 	private final Pointer appHandle;
 	private final long handle;
 	private final ImmutableDataBinding lib;
+	private final CallbackHelper callbackHelper = CallbackHelper.getInstance();
 
 	public ImmutableDataReader(Pointer appHandle, long handle) {
 		this.appHandle = appHandle;
@@ -25,38 +23,14 @@ public class ImmutableDataReader {
 
 	public CompletableFuture<Long> getSize() {
 		final CompletableFuture<Long> future = new CompletableFuture<>();
-		lib.idata_size(appHandle, handle, Pointer.NULL, new HandleCallback() {
-
-			@Override
-			public void onResponse(Pointer userData, FfiResult.ByVal result,
-					long handle) {
-				if (result.isError()) {
-					future.completeExceptionally(new Exception(result
-							.errorMessage()));
-					return;
-				}
-				future.complete(handle);
-			}
-		});
+		lib.idata_size(appHandle, handle, Pointer.NULL, callbackHelper.getHandleCallBack(future));
 		return future;
 	}
 
 	public CompletableFuture<byte[]> read(long offset, long lengthToRead) {
 		final CompletableFuture<byte[]> future = new CompletableFuture<>();
 		lib.idata_read_from_self_encryptor(appHandle, handle, offset,
-				lengthToRead, Pointer.NULL, new CallbackForData() {
-
-					@Override
-					public void onResponse(Pointer userData,
-							FfiResult.ByVal result, Pointer data, long dataLen) {
-						if (result.isError()) {
-							future.completeExceptionally(new Exception(result
-									.errorMessage()));
-							return;
-						}
-						future.complete(data.getByteArray(0, (int) dataLen));
-					}
-				});
+				lengthToRead, Pointer.NULL, callbackHelper.getDataCallback(future));
 		return future;
 	}
 
@@ -64,13 +38,7 @@ public class ImmutableDataReader {
 	protected void finalize() throws Throwable {
 		super.finalize();
 		lib.idata_self_encryptor_reader_free(appHandle, handle, Pointer.NULL,
-				new ResultCallback() {
-
-					@Override
-					public void onResponse(Pointer userData,
-							FfiResult.ByVal result) {
-					}
-				});
+				callbackHelper.getResultCallBack(null));
 	}
 
 }

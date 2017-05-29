@@ -1,20 +1,15 @@
 package net.maidsafe.api;
 
-import com.sun.jna.Pointer;
-
-import net.maidsafe.api.model.AccessContainerMeta;
-import net.maidsafe.api.model.App;
-import net.maidsafe.api.model.AppInfo;
-import net.maidsafe.api.model.ContainerPermission;
-import net.maidsafe.api.model.Keys;
+import net.maidsafe.api.model.*;
+import net.maidsafe.binding.AuthBinding;
 import net.maidsafe.binding.BindingFactory;
 import net.maidsafe.binding.model.AppExchangeInfo;
-import net.maidsafe.binding.model.AuthGrantedResponse;
 import net.maidsafe.binding.model.AuthReq;
+import net.maidsafe.binding.model.AuthUriResponse;
 import net.maidsafe.binding.model.FfiContainerPermission;
 import net.maidsafe.binding.model.ContainerRequest;
 import net.maidsafe.binding.model.FfiCallback;
-import net.maidsafe.binding.model.FfiResult;
+import net.maidsafe.utils.CallbackHelper;
 import net.maidsafe.utils.Helper;
 
 import java.util.ArrayList;
@@ -23,175 +18,142 @@ import java.util.concurrent.CompletableFuture;
 
 public class Auth {
 
-	public CompletableFuture<String> getURI(AppInfo appInfo,
-			List<ContainerPermission> permissions) {
-		return this.getURI(appInfo, permissions, false);
-	}
+    private CallbackHelper callbackHelper = CallbackHelper.getInstance();
+    private AuthBinding authBinding = BindingFactory.getInstance().getAuth();
 
-	public CompletableFuture<String> getURI(AppInfo appInfo,
-			List<ContainerPermission> permissions, boolean createAppContainer) {
-		final CompletableFuture<String> future;
-		FfiCallback.Auth callback;
-		AppExchangeInfo appExchangeInfo;
-		AuthReq request;
+    public CompletableFuture<String> getURI(AppInfo appInfo,
+                                            List<ContainerPermission> permissions) {
+        return this.getURI(appInfo, permissions, false);
+    }
 
-		if (permissions == null) {
-			permissions = new ArrayList<>();
-		}
+    public CompletableFuture<String> getURI(AppInfo appInfo,
+                                            List<ContainerPermission> permissions, boolean createAppContainer) {
+        final CompletableFuture<String> future;
+        final CompletableFuture<AuthUriResponse> cbFuture;
+        final FfiCallback.Auth callback;
+        AppExchangeInfo appExchangeInfo;
+        AuthReq request;
+        future = new CompletableFuture<>();
 
-		future = new CompletableFuture<String>();
-		callback = new FfiCallback.Auth() {
+        if (appInfo == null) {
+            future.completeExceptionally(new Exception(CustomError.ARG_CAN_NOT_BE_NULL));
+            return future;
+        }
 
-			@Override
-			public void onResponse(Pointer userData, FfiResult.ByVal result,
-					int reqId, String uri) {
-				if (result.isError()) {
-					future.completeExceptionally(new Exception(result
-							.toString()));
-					return;
-				}
-				future.complete(uri);
-			}
-		};
+        if (permissions == null) {
+            permissions = new ArrayList<>();
+        }
 
-		try {
-			appExchangeInfo = new AppExchangeInfo(appInfo);
-			request = new AuthReq(appExchangeInfo, permissions,
-					createAppContainer);
+        cbFuture = new CompletableFuture<>();
 
-			BindingFactory.getInstance().getAuth()
-					.encode_auth_req(request, null, callback);
-		} catch (Exception e) {
-			future.completeExceptionally(e);
-		}
-		return future;
-	}
+        callback = callbackHelper.getAuthCallback(cbFuture);
+        appExchangeInfo = new AppExchangeInfo(appInfo);
+        request = new AuthReq(appExchangeInfo, permissions,
+                createAppContainer);
+        authBinding
+                .encode_auth_req(request, null, callback);
 
-	public CompletableFuture<String> getContainerRequestURI(AppInfo appInfo,
-			List<ContainerPermission> permissions) {
-		AppExchangeInfo appExchInfo;
-		List<FfiContainerPermission> contPermissions;
-		FfiCallback.Auth callback;
-		final CompletableFuture<String> future;
+        cbFuture.thenAccept((res) -> future.complete(res.getUri())).exceptionally((t) -> {
+            future.completeExceptionally(t);
+            return null;
+        });
 
-		future = new CompletableFuture<String>();
+        return future;
+    }
 
-		if (permissions == null || permissions.isEmpty()) {
-			future.completeExceptionally(new Exception(
-					"Containers can not be empty"));
-			return future;
-		}
+    public CompletableFuture<String> getContainerRequestURI(AppInfo appInfo,
+                                                            List<ContainerPermission> permissions) {
+        AppExchangeInfo appExchangeInfo;
+        List<FfiContainerPermission> contPermissions;
+        FfiCallback.Auth callback;
+        final CompletableFuture<String> future;
 
-		appExchInfo = new AppExchangeInfo(appInfo);
-		contPermissions = new ArrayList<FfiContainerPermission>();
+        future = new CompletableFuture<>();
 
-		for (ContainerPermission permission : permissions) {
-			contPermissions.add(new FfiContainerPermission(permission));
-		}
-		callback = new FfiCallback.Auth() {
+        if (permissions == null || permissions.isEmpty()) {
+            future.completeExceptionally(new Exception(
+                    CustomError.CONTAINERS_CAN_NOT_BE_EMPTY));
+            return future;
+        }
 
-			@Override
-			public void onResponse(Pointer userData, FfiResult.ByVal result,
-					int reqId, String uri) {
-				if (result.isError()) {
-					future.completeExceptionally(new Exception(result
-							.errorMessage()));
-					return;
-				}
-				future.complete(uri);
-			}
-		};
+        appExchangeInfo = new AppExchangeInfo(appInfo);
+        contPermissions = new ArrayList<>();
 
-		BindingFactory
-				.getInstance()
-				.getAuth()
-				.encode_containers_req(
-						new ContainerRequest(appExchInfo, contPermissions),
-						null, callback);
-		return future;
-	}
+        for (ContainerPermission permission : permissions) {
+            contPermissions.add(new FfiContainerPermission(permission));
+        }
+        callback = (userData, result, reqId, uri) -> {
+            if (result.isError()) {
+                future.completeExceptionally(new Exception(result));
+                return;
+            }
+            future.complete(uri);
+        };
 
-	public CompletableFuture<SafeClient> connectAsAnnonymous(
-			final NetworkObserver observer) {
-		final CompletableFuture<SafeClient> future;
-		future = observer.getFuture();
-		observer.setApp(new App(null, null, null));
-		BindingFactory
-				.getInstance()
-				.getAuth()
-				.app_unregistered(null, observer.getObserver(),
-						observer.getAppRef());
-		if (Helper.isMockEnvironment()) {
-			observer.getObserver().onResponse(null, 0, 0);
-		}
-		return future;
-	}
+        BindingFactory
+                .getInstance()
+                .getAuth()
+                .encode_containers_req(
+                        new ContainerRequest(appExchangeInfo, contPermissions),
+                        null, callback);
+        return future;
+    }
 
-	public CompletableFuture<SafeClient> connectWithURI(final AppInfo appInfo,
-			final String uri, final NetworkObserver observer) {
-		final CompletableFuture<SafeClient> future;
-		future = observer.getFuture();
+    public CompletableFuture<SafeClient> connectAsAnnonymous(
+            final NetworkObserver observer) {
+        final CompletableFuture<SafeClient> future;
+        future = observer.getFuture();
+        observer.setApp(new App(null, null, null));
+        BindingFactory
+                .getInstance()
+                .getAuth()
+                .app_unregistered(null, observer.getObserver(),
+                        observer.getAppRef());
+        if (Helper.isMockEnvironment()) {
+            observer.getObserver().onResponse(null, 0, 0);
+        }
+        return future;
+    }
 
-		FfiCallback.AuthGranted authCb = new FfiCallback.AuthGranted() {
+    public CompletableFuture<SafeClient> connectWithURI(final AppInfo appInfo,
+                                                        final String uri, final NetworkObserver observer) {
+        final CompletableFuture<SafeClient> future;
+        future = observer.getFuture();
 
-			@Override
-			public void onResponse(Pointer userData, int reqId,
-					AuthGrantedResponse authGranted) {
-				observer.setApp(new App(appInfo,
-						new Keys(authGranted.app_keys),
-						new AccessContainerMeta(authGranted.access_container)));
-				try {
-					BindingFactory
-							.getInstance()
-							.getAuth()
-							.app_registered(appInfo.getId(), authGranted, null,
-									observer.getObserver(),
-									observer.getAppRef());
-					if (Helper.isMockEnvironment()) {
-						observer.getObserver().onResponse(null, 0, 0);
-					}
-				} catch (Exception e) {
-					future.completeExceptionally(e);
-				}
-			}
-		};
+        FfiCallback.AuthGranted authCb = (userData, reqId, authGranted) -> {
+            observer.setApp(new App(appInfo,
+                    new Keys(authGranted.app_keys),
+                    new AccessContainerMeta(authGranted.access_container)));
+            try {
+                BindingFactory
+                        .getInstance()
+                        .getAuth()
+                        .app_registered(appInfo.getId(), authGranted, null,
+                                observer.getObserver(),
+                                observer.getAppRef());
+                if (Helper.isMockEnvironment()) {
+                    observer.getObserver().onResponse(null, 0, 0);
+                }
+            } catch (NullPointerException e) {
+                future.completeExceptionally(e);
+            }
+        };
 
-		FfiCallback.ReqIdCallback containerCb = new FfiCallback.ReqIdCallback() {
+        FfiCallback.ReqIdCallback containerCb = (userData, reqId) -> future.completeExceptionally(new Exception(
+                CustomError.NOT_VALID_AUTH_URI));
 
-			@Override
-			public void onResponse(Pointer userData, int reqId) {
-				future.completeExceptionally(new Exception(
-						"Not a valid URI for creating a client"));
-			}
-		};
+        FfiCallback.NoArgCallback revokedCb = userData -> future.completeExceptionally(new Exception(
+                CustomError.NOT_VALID_AUTH_URI));
 
-		FfiCallback.NoArgCallback revokedCb = new FfiCallback.NoArgCallback() {
+        FfiCallback.ErrorCallback errCb = (userData, result, reqId) -> future.completeExceptionally(new Exception(result));
 
-			@Override
-			public void onResponse(Pointer userData) {
-				future.completeExceptionally(new Exception(
-						"Not a valid URI for creating a client"));
-			}
-		};
+        BindingFactory
+                .getInstance()
+                .getAuth()
+                .decode_ipc_msg(uri, null, authCb, containerCb, revokedCb,
+                        errCb);
 
-		FfiCallback.ErrorCallback errCb = new FfiCallback.ErrorCallback() {
-
-			@Override
-			public void onResponse(Pointer userData, FfiResult.ByVal result,
-					int reqId) {
-				future.completeExceptionally(new Exception(result
-						.errorMessage()));
-
-			}
-		};
-
-		BindingFactory
-				.getInstance()
-				.getAuth()
-				.decode_ipc_msg(uri, null, authCb, containerCb, revokedCb,
-						errCb);
-
-		return future;
-	}
+        return future;
+    }
 
 }

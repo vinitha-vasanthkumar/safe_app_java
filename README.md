@@ -8,7 +8,7 @@ safe_app java library.
 
 ### Prerequisites
 
-safe_app_java is compatible with **Java 7 and above**.
+safe_app_java is compatible with **Java 8**.
 
 Maven must be [installed and configured](https://maven.apache.org/install.html).
 
@@ -22,7 +22,7 @@ Execute, `mvn clean install` for generating the JAR. The JAR will be packaged wi
 `mvn clean test` will always download the native libraries based on profile from the configured location in the POM file. 
 
 For running the test cases while development, can skip the download of libraries each time by passing the `wagon.skip` flag.
-`mvn clean test -Dwagon.skip=true`
+`mvn clean test -Dwagon.skip`
 
 
 # License

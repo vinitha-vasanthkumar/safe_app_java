@@ -14,7 +14,7 @@ import junit.framework.TestCase;
 
 public class AuthTest extends TestCase {
 
-	public void testGetAuthURIWithoutNullArguments() throws Exception {
+	public void testGetAuthURIWithNullArguments() throws Exception {
 		Auth auth;
 		CompletableFuture<String> res;
 		auth = new Auth();

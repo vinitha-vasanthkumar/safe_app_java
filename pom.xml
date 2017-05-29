@@ -284,7 +284,7 @@
 									<fromFile>
 										krishnaIndia/safe_core/releases/download/v0.1.0-pre32/safe_app-dev-v0.1.0-pre32-linux-ia32.zip
 									</fromFile>
-									<toDir>${basedir}/res/linux-amd64</toDir>
+									<toDir>${basedir}/res/linux-x86</toDir>
 								</configuration>
 							</execution>
 						</executions>
@@ -303,10 +303,10 @@
 									<target unless="${wagon.skip}">
 										<echo message="Extracting zipped libraries" />
 										<unzip
-											src="${basedir}/res/linux-amd64/safe_app-dev-v0.1.0-pre32-linux-ia32.zip"
-											dest="${basedir}/res/linux-amd64" />
+											src="${basedir}/res/linux-x86/safe_app-dev-v0.1.0-pre32-linux-ia32.zip"
+											dest="${basedir}/res/linux-x86" />
 										<delete>
-											<fileset dir="${basedir}/res/linux-amd64" excludes="*.so" />
+											<fileset dir="${basedir}/res/linux-x86" excludes="*.so" />
 										</delete>
 									</target>
 								</configuration>
@@ -348,7 +348,6 @@
 				<os>
 					<family>unix</family>
 					<name>Linux</name>
-					<arch>x86_64</arch>
 				</os>
 			</activation>
 			<build>
@@ -371,7 +370,7 @@
 									<fromFile>
 										krishnaIndia/safe_core/releases/download/v0.1.0-pre32/safe_app-dev-v0.1.0-pre32-linux-x64.zip
 									</fromFile>
-									<toDir>${basedir}/res/linux-amd64</toDir>
+									<toDir>${basedir}/res/linux-x86-64</toDir>
 								</configuration>
 							</execution>
 						</executions>
@@ -392,9 +391,9 @@
 										<echo message="Extracting zipped libraries" />
 										<unzip
 											src="${basedir}/res/linux-amd64/safe_app-dev-v0.1.0-pre32-linux-x64.zip"
-											dest="${basedir}/res/linux-amd64" />
+											dest="${basedir}/res/linux-x86-64" />
 										<delete>
-											<fileset dir="${basedir}/res/linux-amd64" excludes="*.so" />
+											<fileset dir="${basedir}/res/linux-x86-64" excludes="*.so" />
 										</delete>
 									</target>
 								</configuration>

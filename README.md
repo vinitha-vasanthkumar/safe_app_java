@@ -22,7 +22,7 @@ Execute, `mvn clean install` for generating the JAR. The JAR will be packaged wi
 `mvn clean test` will always download the native libraries based on profile from the configured location in the POM file. 
 
 For running the test cases while development, can skip the download of libraries each time by passing the `wagon.skip` flag.
-`mvn clean test -Dwagon.skip=true`
+`mvn clean test -Dwagon.skip`
 
 
 # License

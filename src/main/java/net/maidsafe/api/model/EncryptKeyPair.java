@@ -4,10 +4,9 @@ import java.util.concurrent.CompletableFuture;
 
 import net.maidsafe.binding.BindingFactory;
 import net.maidsafe.binding.CryptoBinding;
-import net.maidsafe.binding.model.FfiResult;
-import net.maidsafe.binding.model.FfiCallback.CallbackForData;
 
 import com.sun.jna.Pointer;
+import net.maidsafe.utils.CallbackHelper;
 
 public class EncryptKeyPair {
 
@@ -15,6 +14,7 @@ public class EncryptKeyPair {
 	private final PublicEncryptKey publicKey;
 	private final Pointer appHandle;
 	private final CryptoBinding lib = BindingFactory.getInstance().getCrypto();
+	private final CallbackHelper callbackHelper = CallbackHelper.getInstance();
 
 	public EncryptKeyPair(Pointer appHandle, SecretEncryptKey secretKey,
 			PublicEncryptKey publicKey) {
@@ -33,30 +33,13 @@ public class EncryptKeyPair {
 
 	public CompletableFuture<byte[]> decryptSealed(byte[] data) {
 		final CompletableFuture<byte[]> future;
-		future = new CompletableFuture<byte[]>();
+		future = new CompletableFuture<>();
 
 		lib.decrypt_sealed_box(appHandle, data, data.length,
 				publicKey.getHandle(), secretKey.getHandle(), Pointer.NULL,
-				getCallbackForData(future));
+				callbackHelper.getDataCallback(future));
 
 		return future;
-	}
-
-	private CallbackForData getCallbackForData(
-			final CompletableFuture<byte[]> future) {
-		return new CallbackForData() {
-
-			@Override
-			public void onResponse(Pointer userData, FfiResult.ByVal result,
-					Pointer data, long dataLen) {
-				if (result.isError()) {
-					future.completeExceptionally(new Exception(result
-							.errorMessage()));
-					return;
-				}
-				future.complete(data.getByteArray(0, (int) dataLen));
-			}
-		};
 	}
 
 }

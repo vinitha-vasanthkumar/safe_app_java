@@ -2,10 +2,9 @@ package net.maidsafe.api.model;
 
 import net.maidsafe.binding.BindingFactory;
 import net.maidsafe.binding.CipherOptBinding;
-import net.maidsafe.binding.model.FfiCallback.ResultCallback;
-import net.maidsafe.binding.model.FfiResult;
 
 import com.sun.jna.Pointer;
+import net.maidsafe.utils.CallbackHelper;
 
 public class CipherOpt {
 
@@ -27,13 +26,7 @@ public class CipherOpt {
 	protected void finalize() throws Throwable {
 		super.finalize();
 		lib.cipher_opt_free(appHandle, handle, Pointer.NULL,
-				new ResultCallback() {
-
-					@Override
-					public void onResponse(Pointer userData,
-							FfiResult.ByVal result) {
-					}
-				});
+				CallbackHelper.getInstance().getResultCallBack(null));
 	}
 
 }

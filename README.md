@@ -12,9 +12,9 @@ safe_app_java is compatible with **Java 8**.
 
 Repository is set up based on [Composite Build Setup](https://blog.gradle.org/introducing-composite-builds) of Gradle.
 
-[api](/api) is a shared project for AAR and JAR builds. Both [safe-app-java](safe-app-java) and [safe-app-android](safe-app-android) include api project in their build dependency.
+[api](/api) is a shared project for AAR and JAR builds. Both [safe-app](safe-app) and [safe-app-android](safe-app-android) include api project in their build dependency.
 
-Refer the README of [safe-app-java](safe-app-java) and [safe-app-android](safe-app-android) for corresponding build instructions.
+Refer the README of [safe-app](safe-app) and [safe-app-android](safe-app-android) for corresponding build instructions.
 
 # License
 

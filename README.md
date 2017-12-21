@@ -45,7 +45,7 @@ The JAR files would be placed in `safe-app/build/libs` if the build is successfu
 
 ### safe-app-android
 
-[safe-app-android](safe-app-android) project builds platform specific AAR files (mock and non-mock).
+[safe-app-android](safe-app-android) project builds AAR files (mock and non-mock).
 
 #####  Build Commands
 

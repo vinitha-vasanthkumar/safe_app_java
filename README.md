@@ -1,6 +1,6 @@
 ## safe_app_java
 
-**Maintainer:** Krishna Kumar (krishna.kuamr@maidsafe.net)
+**Maintainer:** Krishna Kumar (krishna.kumar@maidsafe.net)
 
 safe_app_java library for generating JAR and AAR packages.
 

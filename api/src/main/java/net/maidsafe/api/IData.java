@@ -1,99 +1,114 @@
 package net.maidsafe.api;
 
+import java.util.concurrent.CompletableFuture;
 import net.maidsafe.api.model.NativeHandle;
 import net.maidsafe.safe_app.NativeBindings;
-import net.maidsafe.utils.CallbackHelper;
-import net.maidsafe.utils.Executor;
 import net.maidsafe.utils.Helper;
 
-import java.util.concurrent.Future;
+
 
 public class IData {
+    private static AppHandle appHandle;
 
-    public static Future<NativeHandle> getWriter() {
-        return Executor.getInstance().submit(new CallbackHelper<NativeHandle>(binder -> {
-            NativeBindings.idataNewSelfEncryptor(BaseSession.appHandle.toLong(), (result, writerHandle) -> {
-                if (result.getErrorCode() != 0) {
-                    binder.onException(Helper.ffiResultToException(result));
-                    return;
-                }
-                binder.onResult(new NativeHandle(writerHandle, (handle) -> {
-                    NativeBindings.idataSelfEncryptorWriterFree(BaseSession.appHandle.toLong(), handle, res -> {
+
+    public IData(final AppHandle appHandle) {
+        init(appHandle);
+    }
+
+    private void init(final AppHandle appHandle) {
+        this.appHandle = appHandle;
+    }
+
+
+    public CompletableFuture<NativeHandle> getWriter() {
+        final CompletableFuture<NativeHandle> future = new CompletableFuture<>();
+        NativeBindings.idataNewSelfEncryptor(appHandle.toLong(), (result, writerHandle) -> {
+            if (result.getErrorCode() != 0) {
+                future.completeExceptionally(Helper.ffiResultToException(result));
+            }
+            future.complete(new NativeHandle(writerHandle, (handle) -> {
+                NativeBindings.idataSelfEncryptorWriterFree(appHandle.toLong(), handle, res -> {
+                });
+            }));
+        });
+        return future;
+    }
+
+
+    public CompletableFuture<Void> write(final NativeHandle writerHandle, final byte[] data) {
+        final CompletableFuture<Void> future = new CompletableFuture<Void>();
+            NativeBindings.idataWriteToSelfEncryptor(appHandle.toLong(), writerHandle.toLong(), data,
+                    (result) -> {
+                        if (result.getErrorCode() != 0) {
+                            future.completeExceptionally(Helper.ffiResultToException(result));
+                        }
+                        future.complete(null);
                     });
-                }));
-            });
-        }));
+        return future;
     }
 
-    public static Future<Void> write(NativeHandle writerHandle, byte[] data) {
-        return Executor.getInstance().submit(new CallbackHelper<Void>(binder -> {
-            NativeBindings.idataWriteToSelfEncryptor(BaseSession.appHandle.toLong(), writerHandle.toLong(), data, (result) -> {
-                if (result.getErrorCode() != 0) {
-                    binder.onException(Helper.ffiResultToException(result));
-                }
-                binder.onResult(null);
-            });
-        }));
+
+    public CompletableFuture<byte[]> close(final NativeHandle writerHandle, final NativeHandle cipherOptHandle) {
+        final CompletableFuture<byte[]> future = new CompletableFuture<>();
+        NativeBindings.idataCloseSelfEncryptor(appHandle.toLong(), writerHandle.toLong(),
+                cipherOptHandle.toLong(), (result, name) -> {
+                    if (result.getErrorCode() != 0) {
+                        future.completeExceptionally(Helper.ffiResultToException(result));
+                    }
+                    future.complete(name);
+                });
+        return future;
     }
 
-    public static Future<byte[]> close(NativeHandle writerHandle, NativeHandle cipherOptHandle) {
-        return Executor.getInstance().submit(new CallbackHelper<byte[]>(binder -> {
-            NativeBindings.idataCloseSelfEncryptor(BaseSession.appHandle.toLong(), writerHandle.toLong(), cipherOptHandle.toLong(), (result, name) -> {
-                if (result.getErrorCode() != 0) {
-                    binder.onException(Helper.ffiResultToException(result));
-                }
-                binder.onResult(name);
-            });
-        }));
+
+    public CompletableFuture<NativeHandle> getReader(final byte[] address) {
+        final CompletableFuture<NativeHandle> future = new CompletableFuture<>();
+        NativeBindings.idataFetchSelfEncryptor(appHandle.toLong(), address, (result, readerHandle) -> {
+            if (result.getErrorCode() != 0) {
+                future.completeExceptionally(Helper.ffiResultToException(result));
+            }
+            future.complete(new NativeHandle(readerHandle, (handle) -> {
+                NativeBindings.idataSelfEncryptorWriterFree(appHandle.toLong(), handle, res -> {
+                });
+            }));
+        });
+        return future;
     }
 
-    public static Future<NativeHandle> getReader(byte[] name) {
-        return Executor.getInstance().submit(new CallbackHelper<NativeHandle>(binder -> {
-            NativeBindings.idataFetchSelfEncryptor(BaseSession.appHandle.toLong(), name, (result, readerHandle) -> {
-                if (result.getErrorCode() != 0) {
-                    binder.onException(Helper.ffiResultToException(result));
-                    return;
-                }
-                binder.onResult(new NativeHandle(readerHandle, (handle) -> {
-                    NativeBindings.idataSelfEncryptorWriterFree(BaseSession.appHandle.toLong(), handle, res -> {
-                    });
-                }));
-            });
-        }));
+
+    public CompletableFuture<byte[]> read(final NativeHandle readerHandle, final long position, final long length) {
+        final CompletableFuture<byte[]> future = new CompletableFuture<>();
+        NativeBindings.idataReadFromSelfEncryptor(appHandle.toLong(), readerHandle.toLong(),
+                position, length, (result, data) -> {
+                    if (result.getErrorCode() != 0) {
+                        future.completeExceptionally(Helper.ffiResultToException(result));
+                    }
+                    future.complete(data);
+                });
+        return future;
     }
 
-    public static Future<byte[]> read(NativeHandle readerHandle, long position, long length) {
-        return Executor.getInstance().submit(new CallbackHelper<byte[]>(binder -> {
-            NativeBindings.idataReadFromSelfEncryptor(BaseSession.appHandle.toLong(), readerHandle.toLong(), position, length, (result, data) -> {
-                if (result.getErrorCode() != 0) {
-                    binder.onException(Helper.ffiResultToException(result));
-                }
-                binder.onResult(data);
-            });
-        }));
+
+    public CompletableFuture<Long> getSize(final NativeHandle readerHandle) {
+        final CompletableFuture<Long> future = new CompletableFuture<>();
+        NativeBindings.idataSize(appHandle.toLong(), readerHandle.toLong(), (result, size) -> {
+            if (result.getErrorCode() != 0) {
+                future.completeExceptionally(Helper.ffiResultToException(result));
+            }
+            future.complete(size);
+        });
+        return future;
     }
 
-    public static Future<Long> getSize(NativeHandle readerHandle) {
-        return Executor.getInstance().submit(new CallbackHelper<Long>(binder -> {
-            NativeBindings.idataSize(BaseSession.appHandle.toLong(), readerHandle.toLong(), (result, size) -> {
-                if (result.getErrorCode() != 0) {
-                    binder.onException(Helper.ffiResultToException(result));
-                    return;
-                }
-                binder.onResult(size);
-            });
-        }));
-    }
 
-    public static Future<Long> getSerialisedSize(byte[] name) {
-        return Executor.getInstance().submit(new CallbackHelper<Long>(binder -> {
-            NativeBindings.idataSerialisedSize(BaseSession.appHandle.toLong(), name, (result, size) -> {
-                if (result.getErrorCode() != 0) {
-                    binder.onException(Helper.ffiResultToException(result));
-                    return;
-                }
-                binder.onResult(size);
-            });
-        }));
+    public CompletableFuture<Long> getSerialisedSize(final byte[] address) {
+        final CompletableFuture<Long> future = new CompletableFuture<>();
+        NativeBindings.idataSerialisedSize(appHandle.toLong(), address, (result, size) -> {
+            if (result.getErrorCode() != 0) {
+                future.completeExceptionally(Helper.ffiResultToException(result));
+            }
+            future.complete(size);
+        });
+        return future;
     }
 }

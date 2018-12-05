@@ -51,6 +51,11 @@ android.libraryVariants.all { variant ->
         outputFileName = "safe-app-android-${it.baseName}-${android.defaultConfig.versionName}.aar"
     }
 }
+tasks.withType(JavaCompile) {
+  configure(options) {
+    options.compilerArgs << '-Xlint:deprecation' << '-Xlint:unchecked'
+  }
+}
 
 task javadoc(type: Javadoc) {
   failOnError false
@@ -63,7 +68,6 @@ task javadoc(type: Javadoc) {
   classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
   classpath += configurations.compile
 }
-
 buildscript {
     repositories {
         google()
@@ -110,15 +114,15 @@ task("downloadNativeLibs", type: Download) {
     dest tempLibDir
 }
 
-task("copyTests", type: Copy) {
+task("attachTests", type: Copy) {
     from fileTree("${rootDir}/safe-app/src/test/java/net/maidsafe/api")
-    into file("${projectDir}/src/androidTest/test/java/net/maidsafe/api")
+    into file("${projectDir}/src/androidTest/java/net/maidsafe/api")
 }
 
-task runInstrumentationTests(dependsOn: 'copyTests') {
+task runInstrumentationTests(dependsOn: "attachTests") {
     dependsOn('connectedMockDebugAndroidTest')
     doLast {
-        delete "${projectDir}/src/androidTest"
+        delete "${projectDir}/src/androidTest/java/net/maidsafe/api"
     }
 }
 
